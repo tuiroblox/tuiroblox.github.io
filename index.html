@@ -1,0 +1,795 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TUI Airways</title>
+    <!-- Tailwind CSS for a modern, utility-first styling approach -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Google Fonts for a clean and professional font -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Inter', sans-serif;
+            background-color: #0b1a2c; /* Deep space blue background */
+            color: #e2e8f0; /* Off-white text color */
+        }
+
+        /* Custom CSS for the taskbar animation */
+        .taskbar {
+            top: 1rem; /* Position at the top */
+            left: 50%;
+            transform: translateX(-50%);
+            width: 4rem; /* Initial width, adjusted for icon size */
+            transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            z-index: 50;
+        }
+
+        .taskbar:hover {
+            width: 38rem; /* Expanded width to accommodate the new item */
+            background-color: #003366; /* Darker blue on hover */
+        }
+
+        .taskbar-content {
+            opacity: 0;
+            transition: opacity 0.3s ease-in-out 0.1s;
+        }
+
+        .taskbar:hover .taskbar-content {
+            opacity: 1;
+        }
+
+        .taskbar-icon {
+            opacity: 1;
+            transition: opacity 0.3s ease-in-out;
+        }
+
+        .taskbar:hover .taskbar-icon {
+            opacity: 0;
+        }
+
+        @media (max-width: 768px) {
+            .taskbar {
+                width: 3.5rem;
+            }
+            .taskbar:hover {
+                width: 90%; /* Adjust for smaller screens */
+            }
+        }
+        /* Custom modal styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 100;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.4);
+            backdrop-filter: blur(5px);
+            align-items: center;
+            justify-content: center;
+        }
+        .modal-content {
+            background-color: #1a202c;
+            padding: 24px;
+            border-radius: 12px;
+            box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
+            border: 1px solid rgba(255, 255, 255, 0.18);
+            text-align: center;
+            max-width: 400px;
+            width: 90%;
+        }
+        .close-button {
+            float: right;
+            font-size: 28px;
+            font-weight: bold;
+            color: #ccc;
+            cursor: pointer;
+        }
+        .close-button:hover,
+        .close-button:focus {
+            color: #fff;
+            text-decoration: none;
+            cursor: pointer;
+        }
+        #admin-links {
+            display: none; /* Initially hidden */
+        }
+    </style>
+</head>
+<body class="min-h-screen antialiased">
+    
+    <!-- Hero Section -->
+    <header class="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-white overflow-hidden">
+        <!-- Background image with an overlay using a placeholder -->
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/003366/ffffff?text=TUI+737+Hero+Image');"></div>
+        <div class="absolute inset-0 bg-black opacity-60"></div>
+
+        <div class="relative z-10 text-center p-4">
+            <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight">
+                TUI Airways
+            </h1>
+            <p class="mt-4 text-lg md:text-xl font-medium text-gray-300">
+                Your journey to amazing destinations begins here.
+            </p>
+        </div>
+    </header>
+
+    <!-- Main Content Section - This is the dynamic section -->
+    <main id="main-content" class="container mx-auto p-4 md:p-8">
+        <!-- About Us Section -->
+        <section class="my-12 text-center">
+            <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">About Our Fleet</h2>
+            <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                TUI Airways operates a modern and efficient fleet, ensuring a comfortable and safe travel experience. Our aircraft are equipped with the latest technology for a seamless journey, whether you're flying short-haul or long-haul.
+            </p>
+        </section>
+
+        <!-- Aircraft Gallery -->
+        <section class="my-12">
+            <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                <!-- Aircraft Card 1: Boeing 737 -->
+                <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                    <!-- Placeholder for Boeing 737 image. Replace with a direct image URL. -->
+                    <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Boeing+737" alt="TUI Boeing 737" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">Boeing 737 MAX</h3>
+                        <p class="text-gray-400">
+                            The backbone of our short- to medium-haul routes, offering a reliable and modern flying experience.
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Aircraft Card 2: Airbus A320 -->
+                <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                    <!-- Placeholder for Airbus A320 image. Replace with a direct image URL. -->
+                    <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Airbus+A320" alt="TUI Airbus A320" class="w-full h-48 object-cover">
+                    <div class="p-6">
+                        <h3 class="text-xl font-semibold text-white mb-2">Airbus A320</h3>
+                        <p class="text-gray-400">
+                            A versatile single-aisle aircraft known for its spacious cabin and passenger-friendly features.
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- Call to Action Section -->
+        <section class="my-12 bg-[#0077b6] rounded-xl shadow-lg p-8 text-center text-white">
+            <h2 class="text-3xl font-bold mb-4">Ready for your next adventure?</h2>
+            <p class="text-lg mb-6">Discover our wide range of destinations and book your perfect holiday today.</p>
+            <a href="#" class="bg-white text-[#0077b6] font-bold py-3 px-8 rounded-full shadow-md hover:bg-gray-100 transition duration-300">
+                Explore Destinations
+            </a>
+        </section>
+    </main>
+
+    <!-- The rounded pill-shaped taskbar at the top -->
+    <div class="taskbar fixed flex items-center justify-center bg-gray-900 bg-opacity-70 backdrop-blur-sm text-white rounded-full p-2 cursor-pointer hover:p-3">
+        <!-- TUI Logo, replacing the SVG icon -->
+        <div class="taskbar-icon w-10 h-10 flex items-center justify-center p-1 transition-opacity duration-300">
+            <!-- Placeholder for TUI Logo image. Replace with a direct image URL. -->
+            <img src="https://placehold.co/100x100/f37021/ffffff?text=TUI" alt="TUI Logo" class="w-full h-full object-contain">
+        </div>
+
+        <!-- Expanded content, initially hidden -->
+        <div class="taskbar-content flex-grow flex items-center justify-around space-x-6 text-sm whitespace-nowrap px-4">
+            <!-- New link for Special Assistance -->
+            <a onclick="loadPage('special-assistance')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-accessible">
+                    <circle cx="12" cy="12" r="10"/>
+                    <path d="M16 12a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v4z"/>
+                    <path d="M12 8v8"/>
+                    <path d="M12 8a2 2 0 1 0 0-4 2 2 0 0 0 0 4z"/>
+                </svg>
+                <span>Book Assistance</span>
+            </a>
+            <!-- Existing links -->
+            <a onclick="loadPage('changelog')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list">
+                    <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
+                    <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
+                    <path d="M12 11h4"/>
+                    <path d="M12 16h4"/>
+                    <path d="M8 11h.01"/>
+                    <path d="M8 16h.01"/>
+                </svg>
+                <span>Changelog</span>
+            </a>
+            <a onclick="loadPage('discord')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square">
+                    <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
+                </svg>
+                <span>Discord Server</span>
+            </a>
+            <a onclick="loadPage('scheduled-flights')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
+                    <path d="M8 2v4"/>
+                    <path d="M16 2v4"/>
+                    <rect width="18" height="18" x="3" y="4" rx="2"/>
+                    <path d="M3 10h18"/>
+                    <path d="M8 14h.01"/>
+                    <path d="M12 14h.01"/>
+                    <path d="M16 14h.01"/>
+                    <path d="M8 18h.01"/>
+                    <path d="M12 18h.01"/>
+                    <path d="M16 18h.01"/>
+                </svg>
+                <span>Scheduled Flights</span>
+            </a>
+            <!-- Admin links, initially hidden -->
+            <a id="admin-links" class="font-medium flex items-center space-x-6 text-sm whitespace-nowrap px-4" style="display: none;">
+                <a onclick="loadPage('admin-flights')" class="hover:text-gray-300 transition-colors duration-200 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
+                        <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
+                        <path d="m15 5 4 4"/>
+                    </svg>
+                    <span>Edit Flights</span>
+                </a>
+                <a onclick="loadPage('admin-changelog')" class="hover:text-gray-300 transition-colors duration-200 flex items-center space-x-2">
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-up">
+                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L15.5 2z"/>
+                        <path d="M14 2v6h6"/>
+                        <path d="M12 16v-6"/>
+                        <path d="m15 13-3-3-3 3"/>
+                    </svg>
+                    <span>Update Changelog</span>
+                </a>
+            </a>
+        </div>
+    </div>
+    
+    <!-- Modal for feedback -->
+    <div id="feedback-modal" class="modal">
+        <div class="modal-content">
+            <span class="close-button" onclick="document.getElementById('feedback-modal').style.display='none';">&times;</span>
+            <p id="modal-message" class="text-xl font-semibold mt-4"></p>
+        </div>
+    </div>
+    
+    <!-- Modal for Access Code -->
+    <div id="access-modal" class="modal">
+        <div class="modal-content p-6">
+            <span class="close-button" onclick="document.getElementById('access-modal').style.display='none';">&times;</span>
+            <h3 class="text-2xl font-bold mb-4">Enter Access Code</h3>
+            <form onsubmit="checkAccessCode(event);">
+                <input type="password" id="access-code-input" class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50" placeholder="Enter code here" required>
+                <button type="submit" class="mt-4 w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                    Submit
+                </button>
+            </form>
+        </div>
+    </div>
+
+    <!-- Hidden "Access Code" button at the bottom right -->
+    <button onclick="document.getElementById('access-modal').style.display='flex';" class="fixed bottom-4 right-4 bg-gray-900 bg-opacity-70 backdrop-blur-sm text-white rounded-full py-2 px-4 shadow-lg hover:bg-gray-800 transition-colors duration-300">
+        Access Code
+    </button>
+
+    <!-- JavaScript for dynamic content loading and Firebase interaction -->
+    <script type="module">
+        // Import Firebase libraries
+        import { initializeApp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-app.js";
+        import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
+        import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
+
+        // Firebase configuration
+        const providedFirebaseConfig = {
+            apiKey: "AIzaSyAPkcanWtFvnsaYe1DwSUDpEnMS2eH5eG0",
+            authDomain: "tuiair.firebaseapp.com",
+            projectId: "tuiair",
+            storageBucket: "tuiair.firebasestorage.app",
+            messagingSenderId: "1046536445636",
+            appId: "1:1046536445636:web:049ace60b23b408e16b391",
+            measurementId: "G-85ZFCKQW0W"
+        };
+        
+        // Use the system-provided config if available
+        const firebaseConfig = (typeof __firebase_config !== 'undefined' && Object.keys(JSON.parse(__firebase_config)).length > 0) 
+            ? JSON.parse(__firebase_config) 
+            : providedFirebaseConfig;
+
+        const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
+        const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        let db, auth, userId = null;
+        let isAdmin = false;
+        let specialAssistanceEnabled = true;
+        let scheduledFlights = [];
+        let changelog = [];
+        
+        // Make the functions globally accessible so they can be called from the HTML `onclick` attributes.
+        window.loadPage = loadPage;
+        window.submitSpecialAssistanceForm = submitSpecialAssistanceForm;
+        window.checkAccessCode = checkAccessCode;
+        window.submitNewFlight = submitNewFlight;
+        window.submitChangelogEntry = submitChangelogEntry;
+        window.toggleSpecialAssistance = toggleSpecialAssistance;
+
+        // Function to initialize Firebase and authenticate
+        async function initializeFirebase() {
+            try {
+                if (Object.keys(firebaseConfig).length > 0) {
+                    const app = initializeApp(firebaseConfig);
+                    db = getFirestore(app);
+                    auth = getAuth(app);
+                    
+                    // Sign in with custom token if available, otherwise anonymously
+                    if (initialAuthToken) {
+                        await signInWithCustomToken(auth, initialAuthToken);
+                        console.log("Signed in with custom token.");
+                    } else {
+                        await signInAnonymously(auth);
+                        console.log("Signed in anonymously.");
+                    }
+                    
+                    onAuthStateChanged(auth, (user) => {
+                        if (user) {
+                            userId = user.uid;
+                            console.log("User authenticated:", userId);
+                            setupFirebaseListeners();
+                        } else {
+                            console.log("User is not authenticated.");
+                            setupFirebaseListeners();
+                        }
+                    });
+                } else {
+                    console.error("Firebase config is missing.");
+                }
+            } catch (error) {
+                console.error("Firebase initialization failed:", error);
+                showModal("Failed to initialize Firebase.", false);
+            }
+        }
+        
+        // Setup real-time listeners for Firebase collections
+        function setupFirebaseListeners() {
+            if (!db) return;
+
+            // Listen for changes to scheduled flights
+            const flightsRef = collection(db, `artifacts/${appId}/public/data/scheduled_flights`);
+            onSnapshot(query(flightsRef), (snapshot) => {
+                const updatedFlights = [];
+                snapshot.forEach(doc => updatedFlights.push({ id: doc.id, ...doc.data() }));
+                scheduledFlights = updatedFlights;
+                // If the user is on the flights page, refresh it
+                if (mainContent.dataset.currentPage === 'scheduled-flights') {
+                    loadPage('scheduled-flights');
+                }
+            }, (error) => {
+                console.error("Failed to fetch scheduled flights:", error);
+            });
+
+            // Listen for changes to the changelog
+            const changelogRef = collection(db, `artifacts/${appId}/public/data/changelog`);
+            onSnapshot(query(changelogRef), (snapshot) => {
+                const updatedChangelog = [];
+                snapshot.forEach(doc => updatedChangelog.push({ id: doc.id, ...doc.data() }));
+                changelog = updatedChangelog.sort((a, b) => b.timestamp.toDate() - a.timestamp.toDate()); // Sort by timestamp descending
+                if (mainContent.dataset.currentPage === 'changelog') {
+                    loadPage('changelog');
+                }
+            }, (error) => {
+                console.error("Failed to fetch changelog:", error);
+            });
+        }
+        
+        // Call the initialization function on window load
+        window.addEventListener('load', initializeFirebase);
+
+        // Get the main content area
+        const mainContent = document.getElementById('main-content');
+        mainContent.dataset.currentPage = 'home'; // Default page
+
+        // Function to show a modal with a message
+        function showModal(message, isSuccess) {
+            const modal = document.getElementById('feedback-modal');
+            const modalMessage = document.getElementById('modal-message');
+            
+            modalMessage.textContent = message;
+            if (isSuccess) {
+                modalMessage.style.color = '#34d399'; // green-500
+            } else {
+                modalMessage.style.color = '#ef4444'; // red-500
+            }
+            modal.style.display = 'flex';
+        }
+
+        // Function to check the admin access code
+        function checkAccessCode(event) {
+            event.preventDefault();
+            const code = document.getElementById('access-code-input').value;
+            const accessModal = document.getElementById('access-modal');
+            
+            if (code === 'PROTUI999') {
+                isAdmin = true;
+                accessModal.style.display = 'none';
+                document.getElementById('admin-links').style.display = 'flex';
+                showModal("Admin access granted!", true);
+                console.log("Admin access granted.");
+            } else {
+                showModal("Incorrect access code.", false);
+            }
+        }
+
+        // Function to toggle special assistance form visibility
+        function toggleSpecialAssistance() {
+            specialAssistanceEnabled = !specialAssistanceEnabled;
+            loadPage('special-assistance');
+        }
+
+        // Function to submit the special assistance form to Firestore
+        async function submitSpecialAssistanceForm(event) {
+            event.preventDefault();
+
+            if (!db) {
+                showModal("Cannot submit. Firebase is not initialized.", false);
+                return;
+            }
+            
+            const form = document.getElementById('assistance-form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Submitting...';
+
+            const formData = {
+                robloxUsername: form.elements['roblox-username'].value,
+                flightNumber: form.elements['flight-number'].value,
+                assistanceType: form.elements['assistance-type'].value,
+                details: form.elements['details'].value,
+                submittedAt: new Date(),
+                userId: userId // Associate the request with the user
+            };
+
+            try {
+                const docRef = await addDoc(collection(db, `artifacts/${appId}/public/data/assistance_requests`), formData);
+                console.log("Document written with ID: ", docRef.id);
+                showModal("Your request has been submitted successfully!", true);
+                form.reset();
+            } catch (e) {
+                console.error("Error adding document: ", e);
+                showModal("Error submitting request. Please try again later.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Submit Request';
+            }
+        }
+        
+        // Function to submit a new flight from the admin form
+        async function submitNewFlight(event) {
+            event.preventDefault();
+            if (!db) return;
+            const form = document.getElementById('admin-flight-form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Adding...';
+
+            const newFlight = {
+                flight: form.elements['flight-number'].value,
+                origin: form.elements['origin'].value,
+                destination: form.elements['destination'].value,
+                departure: form.elements['departure'].value,
+                status: form.elements['status'].value,
+                addedAt: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/scheduled_flights`), newFlight);
+                showModal("Flight added successfully!", true);
+                form.reset();
+            } catch (e) {
+                console.error("Error adding new flight:", e);
+                showModal("Failed to add new flight.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add New Flight';
+            }
+        }
+
+        // Function to submit a new changelog entry from the admin form
+        async function submitChangelogEntry(event) {
+            event.preventDefault();
+            if (!db) return;
+            const form = document.getElementById('admin-changelog-form');
+            const submitBtn = form.querySelector('button[type="submit"]');
+            submitBtn.disabled = true;
+            submitBtn.textContent = 'Adding...';
+
+            const newEntry = {
+                version: form.elements['version'].value,
+                entry: form.elements['entry'].value,
+                timestamp: serverTimestamp()
+            };
+
+            try {
+                await addDoc(collection(db, `artifacts/${appId}/public/data/changelog`), newEntry);
+                showModal("Changelog updated successfully!", true);
+                form.reset();
+            } catch (e) {
+                console.error("Error adding changelog entry:", e);
+                showModal("Failed to update changelog.", false);
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.textContent = 'Add Changelog Entry';
+            }
+        }
+        
+        // --- Page content templates (now dynamic) ---
+        const specialAssistanceContent = () => {
+            if (!specialAssistanceEnabled) {
+                return `
+                    <section class="my-12 text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-2xl mx-auto">
+                        <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">Special Assistance Bookings are currently closed.</h2>
+                        <p class="text-lg text-gray-400 mb-6">
+                            Please check back later for availability.
+                        </p>
+                        ${isAdmin ? `<button onclick="toggleSpecialAssistance()" class="mt-4 bg-green-500 hover:bg-green-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">Enable Special Assistance</button>` : ''}
+                    </section>
+                `;
+            }
+            return `
+                <section class="my-12 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">Book Special Assistance</h2>
+                    <p class="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
+                        We are committed to providing a comfortable journey for all our passengers. Please fill out the form below to request special assistance for your flight.
+                    </p>
+                    <div class="max-w-xl mx-auto bg-gray-800 rounded-xl shadow-lg p-8">
+                        <form id="assistance-form" onsubmit="submitSpecialAssistanceForm(event);" class="space-y-6 text-left">
+                            <div>
+                                <label for="roblox-username" class="block text-sm font-medium text-gray-300">Roblox Username</label>
+                                <input type="text" id="roblox-username" name="roblox-username" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                            </div>
+                            <div>
+                                <label for="flight-number" class="block text-sm font-medium text-gray-300">Flight Number</label>
+                                <input type="text" id="flight-number" name="flight-number" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                            </div>
+                            <div>
+                                <label for="assistance-type" class="block text-sm font-medium text-gray-300">Type of Assistance</label>
+                                <select id="assistance-type" name="assistance-type" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                                    <option value="">Select...</option>
+                                    <option value="wheelchair">Wheelchair assistance</option>
+                                    <option value="hearing-impaired">Assistance for hearing impaired</option>
+                                    <option value="visual-impaired">Assistance for visually impaired</option>
+                                    <option value="unaccompanied-minor">Unaccompanied minor</option>
+                                    <option value="other">Other</option>
+                                </select>
+                            </div>
+                            <div>
+                                <label for="details" class="block text-sm font-medium text-gray-300">Additional Details</label>
+                                <textarea id="details" name="details" rows="4" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2"></textarea>
+                            </div>
+                            <div class="text-center">
+                                <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                                    Submit Request
+                                </button>
+                            </div>
+                        </form>
+                        ${isAdmin ? `<button onclick="toggleSpecialAssistance()" class="mt-4 bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">Disable Special Assistance</button>` : ''}
+                    </div>
+                </section>
+            `;
+        };
+
+        const changelogContent = () => `
+            <section class="my-12 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">Changelog</h2>
+                <div class="text-left max-w-3xl mx-auto">
+                    ${changelog.length > 0 ? changelog.map(entry => `
+                        <div class="bg-gray-800 rounded-xl shadow-lg p-6 mb-6">
+                            <h3 class="text-xl font-semibold text-white mb-2">${entry.version} - ${entry.timestamp ? new Date(entry.timestamp.seconds * 1000).toLocaleDateString() : 'Loading...'}</h3>
+                            <p class="text-gray-400">${entry.entry}</p>
+                        </div>
+                    `).join('') : '<p class="text-lg text-gray-400">No changelog entries yet.</p>'}
+                </div>
+            </section>
+        `;
+        
+        const scheduledFlightsContent = () => `
+            <section class="my-12 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">Scheduled Flights</h2>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
+                    Below is a list of our currently scheduled flights.
+                </p>
+                <div class="overflow-x-auto">
+                    <table class="min-w-full bg-gray-800 rounded-xl shadow-lg">
+                        <thead>
+                            <tr class="bg-gray-700 text-left">
+                                <th class="p-4 text-gray-200 font-semibold">Flight</th>
+                                <th class="p-4 text-gray-200 font-semibold">Origin</th>
+                                <th class="p-4 text-gray-200 font-semibold">Destination</th>
+                                <th class="p-4 text-gray-200 font-semibold">Departure</th>
+                                <th class="p-4 text-gray-200 font-semibold">Status</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            ${scheduledFlights.length > 0 ? scheduledFlights.map(flight => `
+                                <tr class="border-b border-gray-700">
+                                    <td class="p-4">${flight.flight}</td>
+                                    <td class="p-4">${flight.origin}</td>
+                                    <td class="p-4">${flight.destination}</td>
+                                    <td class="p-4">${flight.departure}</td>
+                                    <td class="p-4">
+                                        <span class="text-${flight.status === 'On Time' ? 'green' : 'yellow'}-400">${flight.status}</span>
+                                    </td>
+                                </tr>
+                            `).join('') : `
+                                <tr>
+                                    <td colspan="5" class="p-4 text-center text-gray-400">No flights currently scheduled.</td>
+                                </tr>
+                            `}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        `;
+
+        const adminEditFlightsContent = `
+            <section class="my-12 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">Admin: Add New Flight</h2>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
+                    Use this form to add a new flight to the scheduled flights list.
+                </p>
+                <div class="max-w-xl mx-auto bg-gray-800 rounded-xl shadow-lg p-8">
+                    <form id="admin-flight-form" onsubmit="submitNewFlight(event);" class="space-y-6 text-left">
+                        <div>
+                            <label for="flight-number" class="block text-sm font-medium text-gray-300">Flight Number</label>
+                            <input type="text" id="flight-number" name="flight-number" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                        </div>
+                        <div>
+                            <label for="origin" class="block text-sm font-medium text-gray-300">Origin</label>
+                            <input type="text" id="origin" name="origin" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                        </div>
+                        <div>
+                            <label for="destination" class="block text-sm font-medium text-gray-300">Destination</label>
+                            <input type="text" id="destination" name="destination" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                        </div>
+                        <div>
+                            <label for="departure" class="block text-sm font-medium text-gray-300">Departure Time</label>
+                            <input type="text" id="departure" name="departure" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                        </div>
+                        <div>
+                            <label for="status" class="block text-sm font-medium text-gray-300">Status</label>
+                            <select id="status" name="status" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                                <option value="On Time">On Time</option>
+                                <option value="Delayed">Delayed</option>
+                                <option value="Cancelled">Cancelled</option>
+                            </select>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                                Add New Flight
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        `;
+
+        const adminChangelogContent = `
+            <section class="my-12 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">Admin: Update Changelog</h2>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto mb-8">
+                    Use this form to add a new entry to the changelog.
+                </p>
+                <div class="max-w-xl mx-auto bg-gray-800 rounded-xl shadow-lg p-8">
+                    <form id="admin-changelog-form" onsubmit="submitChangelogEntry(event);" class="space-y-6 text-left">
+                        <div>
+                            <label for="version" class="block text-sm font-medium text-gray-300">Version Number</label>
+                            <input type="text" id="version" name="version" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required>
+                        </div>
+                        <div>
+                            <label for="entry" class="block text-sm font-medium text-gray-300">Changelog Entry</label>
+                            <textarea id="entry" name="entry" rows="4" class="mt-1 block w-full rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50 p-2" required></textarea>
+                        </div>
+                        <div class="text-center">
+                            <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                                Add Changelog Entry
+                            </button>
+                        </div>
+                    </form>
+                </div>
+            </section>
+        `;
+        
+        // Content for the homepage (unchanged)
+        const homePageContent = `
+            <!-- About Us Section -->
+            <section class="my-12 text-center">
+                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">About Our Fleet</h2>
+                <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                    TUI Airways operates a modern and efficient fleet, ensuring a comfortable and safe travel experience. Our aircraft are equipped with the latest technology for a seamless journey, whether you're flying short-haul or long-haul.
+                </p>
+            </section>
+
+            <!-- Aircraft Gallery -->
+            <section class="my-12">
+                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                    <!-- Aircraft Card 1: Boeing 737 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Boeing+737" alt="TUI Boeing 737" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-white mb-2">Boeing 737 MAX</h3>
+                            <p class="text-gray-400">
+                                The backbone of our short- to medium-haul routes, offering a reliable and modern flying experience.
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Aircraft Card 2: Airbus A320 -->
+                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                        <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Airbus+A320" alt="TUI Airbus A320" class="w-full h-48 object-cover">
+                        <div class="p-6">
+                            <h3 class="text-xl font-semibold text-white mb-2">Airbus A320</h3>
+                            <p class="text-gray-400">
+                                A versatile single-aisle aircraft known for its spacious cabin and passenger-friendly features.
+                            </p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Call to Action Section -->
+            <section class="my-12 bg-[#0077b6] rounded-xl shadow-lg p-8 text-center text-white">
+                <h2 class="text-3xl font-bold mb-4">Ready for your next adventure?</h2>
+                <p class="text-lg mb-6">Discover our wide range of destinations and book your perfect holiday today.</p>
+                <a href="#" class="bg-white text-[#0077b6] font-bold py-3 px-8 rounded-full shadow-md hover:bg-gray-100 transition duration-300">
+                    Explore Destinations
+                </a>
+            </section>
+        `;
+        
+        // Function to load different page content
+        function loadPage(pageName) {
+            mainContent.dataset.currentPage = pageName;
+            switch(pageName) {
+                case 'home':
+                    mainContent.innerHTML = homePageContent;
+                    break;
+                case 'changelog':
+                    mainContent.innerHTML = changelogContent();
+                    break;
+                case 'scheduled-flights':
+                    mainContent.innerHTML = scheduledFlightsContent();
+                    break;
+                case 'special-assistance':
+                    mainContent.innerHTML = specialAssistanceContent();
+                    break;
+                case 'admin-flights':
+                    if (isAdmin) {
+                        mainContent.innerHTML = adminEditFlightsContent;
+                    } else {
+                        loadPage('home'); // Redirect if not admin
+                    }
+                    break;
+                case 'admin-changelog':
+                    if (isAdmin) {
+                        mainContent.innerHTML = adminChangelogContent;
+                    } else {
+                        loadPage('home'); // Redirect if not admin
+                    }
+                    break;
+                case 'discord':
+                    mainContent.innerHTML = `
+                        <section class="my-12 text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-2xl mx-auto">
+                            <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">Join Our Discord!</h2>
+                            <p class="text-lg text-gray-400 mb-6">
+                                The Discord link will be added here soon. Stay tuned!
+                            </p>
+                        </section>
+                    `;
+                    break;
+                default:
+                    mainContent.innerHTML = homePageContent;
+                    break;
+            }
+        }
+
+        // Initial page load
+        loadPage('home');
+    </script>
+</body>
+</html>
