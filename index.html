@@ -16,47 +16,40 @@
             background-color: #0b1a2c; /* Deep space blue background */
             color: #e2e8f0; /* Off-white text color */
         }
-
-        /* Custom CSS for the taskbar animation */
+        /* Custom styles for the nav and main content */
         .taskbar {
-            top: 1rem; /* Position at the top */
+            top: 1rem;
             left: 50%;
             transform: translateX(-50%);
-            width: 4rem; /* Initial width, adjusted for icon size */
+            width: 4rem;
             transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
             box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
             z-index: 50;
         }
-
         .taskbar:hover {
-            width: 38rem; /* Expanded width to accommodate the new item */
+            width: clamp(20rem, 80%, 65rem); /* Responsive width for taskbar */
             background-color: #003366; /* Darker blue on hover */
         }
-
         .taskbar-content {
             opacity: 0;
             transition: opacity 0.3s ease-in-out 0.1s;
         }
-
         .taskbar:hover .taskbar-content {
             opacity: 1;
         }
-
         .taskbar-icon {
             opacity: 1;
             transition: opacity 0.3s ease-in-out;
         }
-
         .taskbar:hover .taskbar-icon {
             opacity: 0;
         }
-
         @media (max-width: 768px) {
             .taskbar {
                 width: 3.5rem;
             }
             .taskbar:hover {
-                width: 90%; /* Adjust for smaller screens */
+                width: 90%;
             }
         }
         /* Custom modal styles */
@@ -96,8 +89,18 @@
             text-decoration: none;
             cursor: pointer;
         }
-        #admin-links {
-            display: none; /* Initially hidden */
+        /* Style for the loading spinner */
+        .loader {
+            border: 4px solid #f3f3f3;
+            border-top: 4px solid #0077b6;
+            border-radius: 50%;
+            width: 40px;
+            height: 40px;
+            animation: spin 2s linear infinite;
+        }
+        @keyframes spin {
+            0% { transform: rotate(0deg); }
+            100% { transform: rotate(360deg); }
         }
     </style>
 </head>
@@ -121,7 +124,10 @@
 
     <!-- Main Content Section - This is the dynamic section -->
     <main id="main-content" class="container mx-auto p-4 md:p-8">
-        <!-- Default content will be injected here by JavaScript -->
+        <!-- Loading spinner while Firebase is initializing -->
+        <div id="loading-spinner" class="flex justify-center items-center h-40">
+            <div class="loader"></div>
+        </div>
     </main>
 
     <!-- The rounded pill-shaped taskbar at the top -->
@@ -133,8 +139,13 @@
         </div>
 
         <!-- Expanded content, initially hidden -->
-        <div class="taskbar-content flex-grow flex items-center justify-around space-x-6 text-sm whitespace-nowrap px-4">
-            <!-- New link for Special Assistance -->
+        <div id="taskbar-content" class="taskbar-content flex-grow flex items-center justify-around space-x-6 text-sm whitespace-nowrap px-4">
+            <a onclick="loadPage('home')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home">
+                    <path d="M12 2l-9 9v11h6v-7h6v7h6v-11z"/>
+                </svg>
+                <span>Home</span>
+            </a>
             <a onclick="loadPage('special-assistance')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-accessible">
                     <circle cx="12" cy="12" r="10"/>
@@ -144,7 +155,6 @@
                 </svg>
                 <span>Book Assistance</span>
             </a>
-            <!-- Existing links -->
             <a onclick="loadPage('changelog')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list">
                     <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
@@ -177,25 +187,18 @@
                 </svg>
                 <span>Scheduled Flights</span>
             </a>
-            <!-- Admin links, initially hidden -->
-            <div id="admin-links" class="flex items-center space-x-6 text-sm whitespace-nowrap px-4" style="display: none;">
-                <a onclick="loadPage('admin-flights')" class="hover:text-gray-300 transition-colors duration-200 flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-pencil">
-                        <path d="M17 3a2.85 2.85 0 1 1 4 4L7.5 20.5 2 22l1.5-5.5Z"/>
-                        <path d="m15 5 4 4"/>
-                    </svg>
-                    <span>Edit Flights</span>
-                </a>
-                <a onclick="loadPage('admin-changelog')" class="hover:text-gray-300 transition-colors duration-200 flex items-center space-x-2">
-                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-file-up">
-                        <path d="M15 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V7.5L15.5 2z"/>
-                        <path d="M14 2v6h6"/>
-                        <path d="M12 16v-6"/>
-                        <path d="m15 13-3-3-3 3"/>
-                    </svg>
-                    <span>Update Changelog</span>
-                </a>
-            </div>
+            <a id="admin-link" onclick="handleAdminLink()" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-cog">
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M16 19c0-2.2-3.6-4-8-4s-8 1.8-8 4"/>
+                    <circle cx="12" cy="7" r="4"/>
+                    <path d="M17 17v2"/>
+                    <path d="M17 21a2 2 0 0 1-2-2v-1"/>
+                    <path d="M19 17v2"/>
+                    <path d="M19 21a2 2 0 0 0 2-2v-1"/>
+                </svg>
+                <span>Admin</span>
+            </a>
         </div>
     </div>
     
@@ -207,25 +210,6 @@
         </div>
     </div>
     
-    <!-- Modal for Access Code -->
-    <div id="access-modal" class="modal">
-        <div class="modal-content p-6">
-            <span class="close-button" onclick="document.getElementById('access-modal').style.display='none';">&times;</span>
-            <h3 class="text-2xl font-bold mb-4">Enter Access Code</h3>
-            <form onsubmit="checkAccessCode(event);">
-                <input type="password" id="access-code-input" class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50" placeholder="Enter code here" required>
-                <button type="submit" class="mt-4 w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                    Submit
-                </button>
-            </form>
-        </div>
-    </div>
-
-    <!-- Hidden "Access Code" button at the bottom right -->
-    <button onclick="document.getElementById('access-modal').style.display='flex';" class="fixed bottom-4 right-4 bg-gray-900 bg-opacity-70 backdrop-blur-sm text-white rounded-full py-2 px-4 shadow-lg hover:bg-gray-800 transition-colors duration-300">
-        Access Code
-    </button>
-
     <!-- JavaScript for dynamic content loading and Firebase interaction -->
     <script type="module">
         // Import Firebase libraries
@@ -233,30 +217,13 @@
         import { getAuth, signInWithCustomToken, signInAnonymously, onAuthStateChanged } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-auth.js";
         import { getFirestore, collection, addDoc, onSnapshot, query, serverTimestamp } from "https://www.gstatic.com/firebasejs/11.6.1/firebase-firestore.js";
 
-        // This is the hardcoded Firebase configuration you provided.
-        // It will be used if a configuration is not automatically supplied by the environment.
-        const providedFirebaseConfig = {
-            apiKey: "AIzaSyAPkcanWtFvnsaYe1DwSUDpEnMS2eH5eG0",
-            authDomain: "tuiair.firebaseapp.com",
-            projectId: "tuiair",
-            storageBucket: "tuiair.firebasestorage.app",
-            messagingSenderId: "1046536445636",
-            appId: "1:1046536445636:web:049ace60b23b408e16b391",
-            measurementId: "G-85ZFCKQW0W"
-        };
-        
-        // This logic ensures the app uses the environment's configuration if available,
-        // otherwise it uses the hardcoded configuration.
-        const firebaseConfig = (typeof __firebase_config !== 'undefined' && Object.keys(JSON.parse(__firebase_config)).length > 0) 
-            ? JSON.parse(__firebase_config) 
-            : providedFirebaseConfig;
-
         // The app ID and authentication token are provided by the environment.
         const appId = typeof __app_id !== 'undefined' ? __app_id : 'default-app-id';
         const initialAuthToken = typeof __initial_auth_token !== 'undefined' ? __initial_auth_token : null;
+        const firebaseConfig = typeof __firebase_config !== 'undefined' ? JSON.parse(__firebase_config) : null;
+        
         let db, auth, userId = null;
-        let isAdmin = false;
-        let specialAssistanceEnabled = true;
+        let isAdmin = false; // Flag to track admin status
         let scheduledFlights = [];
         let changelog = [];
         let isAuthReady = false; // Flag to track when authentication is complete
@@ -264,51 +231,59 @@
         // Make the functions globally accessible so they can be called from the HTML `onclick` attributes.
         window.loadPage = loadPage;
         window.submitSpecialAssistanceForm = submitSpecialAssistanceForm;
-        window.checkAccessCode = checkAccessCode;
-        window.submitNewFlight = submitNewFlight;
-        window.submitChangelogEntry = submitChangelogEntry;
-        window.toggleSpecialAssistance = toggleSpecialAssistance;
+        window.handleAdminLogin = handleAdminLogin;
+        window.handleAdminLink = handleAdminLink;
+        window.logout = logout;
+        window.addFlight = addFlight;
+        window.addChangelogEntry = addChangelogEntry;
 
         // Function to initialize Firebase and authenticate
         async function initializeFirebase() {
             try {
-                if (Object.keys(firebaseConfig).length > 0) {
-                    const app = initializeApp(firebaseConfig);
-                    db = getFirestore(app);
-                    auth = getAuth(app);
-                    
-                    // Sign in with custom token if available, otherwise anonymously
-                    if (initialAuthToken) {
-                        await signInWithCustomToken(auth, initialAuthToken);
-                        console.log("Signed in with custom token.");
-                    } else {
-                        await signInAnonymously(auth);
-                        console.log("Signed in anonymously.");
-                    }
-                    
-                    onAuthStateChanged(auth, (user) => {
-                        userId = user ? user.uid : null;
-                        isAuthReady = true; // Set flag to true once auth state is checked
-                        console.log("Authentication state changed. isAuthReady:", isAuthReady, "User ID:", userId);
-                        setupFirebaseListeners();
-                    });
-                } else {
-                    console.error("Firebase config is missing.");
-                    showModal("Firebase config is missing. Data submission will not work.", false);
+                if (!firebaseConfig) {
+                    console.error("Firebase initialization failed: Configuration object is missing.");
+                    showModal("Failed to initialize Firebase. Data submission will not work.", false);
+                    document.getElementById('loading-spinner').style.display = 'none';
+                    return;
                 }
+
+                const app = initializeApp(firebaseConfig);
+                db = getFirestore(app);
+                auth = getAuth(app);
+                
+                // For normal users, anonymous sign-in is the default method
+                // The platform may also provide a custom token for a specific user session.
+                if (initialAuthToken) {
+                    console.log("Using custom auth token provided by the environment.");
+                    await signInWithCustomToken(auth, initialAuthToken);
+                } else {
+                    console.log("No custom auth token found. Signing in anonymously.");
+                    await signInAnonymously(auth);
+                }
+                
+                onAuthStateChanged(auth, (user) => {
+                    userId = user ? user.uid : null;
+                    isAuthReady = true; // Set flag to true once auth state is checked
+                    console.log("Authentication state changed. isAuthReady:", isAuthReady, "User ID:", userId);
+                    setupFirebaseListeners();
+                    updateTaskbar();
+                    loadPage('home'); // Load the initial page only after auth is ready
+                    document.getElementById('loading-spinner').style.display = 'none';
+                });
             } catch (error) {
                 console.error("Firebase initialization failed:", error);
                 showModal("Failed to initialize Firebase. Data submission will not work. Check the console for details.", false);
+                document.getElementById('loading-spinner').style.display = 'none';
             }
         }
         
         // Setup real-time listeners for Firebase collections
         function setupFirebaseListeners() {
-            if (!db) {
-                console.error("Firestore database object is not initialized. Cannot set up listeners.");
+            if (!db || !isAuthReady) {
+                console.error("Firestore database object is not initialized or auth is not ready. Cannot set up listeners.");
                 return;
             }
-
+            
             // Listen for changes to scheduled flights
             const flightsRef = collection(db, `artifacts/${appId}/public/data/scheduled_flights`);
             onSnapshot(query(flightsRef), (snapshot) => {
@@ -335,25 +310,14 @@
             }, (error) => {
                 console.error("Failed to fetch changelog:", error);
             });
-
-            // Listen for changes to special assistance
-            const assistanceRef = collection(db, `artifacts/${appId}/public/data/assistance_requests`);
-            onSnapshot(query(assistanceRef), (snapshot) => {
-                console.log("Special assistance requests updated.");
-            }, (error) => {
-                console.error("Failed to fetch special assistance requests:", error);
-            });
         }
         
         // Call the initialization function on window load
-        window.addEventListener('load', () => {
-            initializeFirebase();
-            loadPage('home');
-            updateTaskbar();
-        });
+        window.addEventListener('load', initializeFirebase);
 
         // Get the main content area
         const mainContent = document.getElementById('main-content');
+        const adminLink = document.getElementById('admin-link');
         mainContent.dataset.currentPage = 'home'; // Default page
 
         // Function to show a modal with a message
@@ -369,48 +333,11 @@
             modal.style.display = 'flex';
         }
 
-        // Function to check the admin access code
-        function checkAccessCode(event) {
-            event.preventDefault();
-            const code = document.getElementById('access-code-input').value;
-            const accessModal = document.getElementById('access-modal');
-            if (code === 'PROTUI999') {
-                isAdmin = true;
-                accessModal.style.display = 'none';
-                showModal("Admin access granted!", true);
-                console.log("Admin access granted.");
-                updateTaskbar(); // Refresh the taskbar to show admin links
-            } else {
-                showModal("Incorrect access code.", false);
-            }
-        }
-
-        // Function to dynamically update the taskbar links
-        function updateTaskbar() {
-            const adminLinksElement = document.getElementById('admin-links');
-            if (isAdmin) {
-                adminLinksElement.style.display = 'flex';
-            } else {
-                adminLinksElement.style.display = 'none';
-            }
-        }
-
-        // Function to toggle special assistance form visibility
-        function toggleSpecialAssistance() {
-            specialAssistanceEnabled = !specialAssistanceEnabled;
-            loadPage('special-assistance');
-        }
-
         // Function to submit the special assistance form to Firestore
         async function submitSpecialAssistanceForm(event) {
             event.preventDefault();
-            if (!isAuthReady) {
-                showModal("Application is still initializing. Please wait a moment and try again.", false);
-                return;
-            }
-            if (!db) {
-                showModal("Cannot submit. Firebase is not initialized. Check console for details.", false);
-                console.error("Firestore database object is not initialized. Cannot submit form data.");
+            if (!isAuthReady || !db || !userId) {
+                showModal("Application is still initializing or user not authenticated. Please wait a moment and try again.", false);
                 return;
             }
             const form = document.getElementById('assistance-form');
@@ -427,9 +354,7 @@
             };
             try {
                 const collectionPath = `artifacts/${appId}/public/data/assistance_requests`;
-                console.log("Attempting to write to collection:", collectionPath);
-                const docRef = await addDoc(collection(db, collectionPath), formData);
-                console.log("Document written with ID: ", docRef.id);
+                await addDoc(collection(db, collectionPath), formData);
                 showModal("Your request has been submitted successfully!", true);
                 form.reset();
             } catch (e) {
@@ -440,128 +365,195 @@
                 submitBtn.textContent = 'Submit Request';
             }
         }
+        
+        // --- Admin Login Logic ---
+        const accessCode = "PROTUI999"; // The specific access code
 
-        // Function to submit a new flight from the admin form
-        async function submitNewFlight(event) {
+        function handleAdminLink() {
+            if (isAdmin) {
+                logout();
+            } else {
+                loadPage('admin-login');
+            }
+        }
+
+        function handleAdminLogin(event) {
             event.preventDefault();
-            if (!isAuthReady) {
-                showModal("Application is still initializing. Please wait a moment and try again.", false);
+            const form = document.getElementById('admin-login-form');
+            const code = form.elements['admin-code'].value;
+            if (code === accessCode) {
+                isAdmin = true;
+                showModal("Admin login successful!", true);
+                updateTaskbar();
+                loadPage('home');
+            } else {
+                showModal("Invalid access code. Please try again.", false);
+            }
+        }
+
+        function logout() {
+            isAdmin = false;
+            showModal("Logged out successfully.", true);
+            updateTaskbar();
+            loadPage('home');
+        }
+
+        function updateTaskbar() {
+            const taskbarContent = document.getElementById('taskbar-content');
+            
+            // Remove existing admin-specific links first
+            const existingAdminLinks = taskbarContent.querySelectorAll('a[data-admin-link="true"]');
+            existingAdminLinks.forEach(link => link.remove());
+
+            if (isAdmin) {
+                adminLink.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-log-out">
+                        <path d="M9 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h4"/>
+                        <polyline points="16 17 21 12 16 7"/>
+                        <line x1="21" x2="9" y1="12" y2="12"/>
+                    </svg>
+                    <span>Logout</span>
+                `;
+                adminLink.onclick = logout;
+                
+                const adminFlightsLink = document.createElement('a');
+                adminFlightsLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Edit Flights</span>`;
+                adminFlightsLink.className = "font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200";
+                adminFlightsLink.onclick = () => loadPage('admin-flights');
+                adminFlightsLink.dataset.adminLink = "true";
+
+                const adminChangelogLink = document.createElement('a');
+                adminChangelogLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-plus"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11v6"/><path d="M9 14h6"/></svg><span>Add Changelog</span>`;
+                adminChangelogLink.className = "font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200";
+                adminChangelogLink.onclick = () => loadPage('admin-changelog');
+                adminChangelogLink.dataset.adminLink = "true";
+
+                taskbarContent.appendChild(adminFlightsLink);
+                taskbarContent.appendChild(adminChangelogLink);
+
+            } else {
+                adminLink.innerHTML = `
+                    <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-cog">
+                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M16 19c0-2.2-3.6-4-8-4s-8 1.8-8 4"/>
+                        <circle cx="12" cy="7" r="4"/>
+                        <path d="M17 17v2"/>
+                        <path d="M17 21a2 2 0 0 1-2-2v-1"/>
+                        <path d="M19 17v2"/>
+                        <path d="M19 21a2 2 0 0 0 2-2v-1"/>
+                    </svg>
+                    <span>Admin</span>
+                `;
+                adminLink.onclick = () => loadPage('admin-login');
+            }
+        }
+
+        // Add Flight functionality
+        async function addFlight(event) {
+            event.preventDefault();
+            if (!isAdmin) {
+                showModal("You must be an admin to add a flight.", false);
                 return;
             }
-            if (!db) {
-                showModal("Cannot submit. Firebase is not initialized. Check console for details.", false);
-                console.error("Firestore database object is not initialized. Cannot submit form data.");
-                return;
-            }
-            const form = document.getElementById('admin-flight-form');
+            const form = document.getElementById('add-flight-form');
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
-            const newFlight = {
+            const formData = {
                 flight: form.elements['flight-number'].value,
+                aircraft: form.elements['aircraft'].value,
                 origin: form.elements['origin'].value,
                 destination: form.elements['destination'].value,
                 departure: form.elements['departure'].value,
                 arrival: form.elements['arrival'].value,
-                aircraft: form.elements['aircraft'].value,
-                date: form.elements['date'].value,
-                status: 'Scheduled',
+                status: form.elements['status'].value,
                 createdAt: serverTimestamp()
             };
             try {
-                const collectionPath = `artifacts/${appId}/public/data/scheduled_flights`;
-                console.log("Attempting to write to collection:", collectionPath);
-                await addDoc(collection(db, collectionPath), newFlight);
-                showModal("New flight added successfully!", true);
+                await addDoc(collection(db, `artifacts/${appId}/public/data/scheduled_flights`), formData);
+                showModal("Flight added successfully!", true);
                 form.reset();
             } catch (e) {
-                console.error("Error adding document: ", e);
-                showModal("Error adding flight. Check the console for details.", false);
+                console.error("Error adding flight: ", e);
+                showModal("Error adding flight. Please try again.", false);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Add Flight';
             }
         }
         
-        // Function to submit a new changelog entry from the admin form
-        async function submitChangelogEntry(event) {
+        // Add Changelog entry functionality
+        async function addChangelogEntry(event) {
             event.preventDefault();
-            if (!isAuthReady) {
-                showModal("Application is still initializing. Please wait a moment and try again.", false);
+            if (!isAdmin) {
+                showModal("You must be an admin to add a changelog entry.", false);
                 return;
             }
-            if (!db) {
-                showModal("Cannot submit. Firebase is not initialized. Check console for details.", false);
-                console.error("Firestore database object is not initialized. Cannot submit form data.");
-                return;
-            }
-            const form = document.getElementById('admin-changelog-form');
+            const form = document.getElementById('add-changelog-form');
             const submitBtn = form.querySelector('button[type="submit"]');
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
-            const newEntry = {
-                title: form.elements['changelog-title'].value,
-                description: form.elements['changelog-description'].value,
+            const formData = {
+                title: form.elements['entry-title'].value,
+                description: form.elements['entry-description'].value,
                 timestamp: serverTimestamp()
             };
             try {
-                const collectionPath = `artifacts/${appId}/public/data/changelog`;
-                console.log("Attempting to write to collection:", collectionPath);
-                await addDoc(collection(db, collectionPath), newEntry);
+                await addDoc(collection(db, `artifacts/${appId}/public/data/changelog`), formData);
                 showModal("Changelog entry added successfully!", true);
                 form.reset();
             } catch (e) {
-                console.error("Error adding document: ", e);
-                showModal("Error adding changelog entry. Check the console for details.", false);
+                console.error("Error adding changelog entry: ", e);
+                showModal("Error adding changelog entry. Please try again.", false);
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Add Entry';
             }
         }
 
-        // Define the content for each page as functions
-        const homePageContent = () => `
-            <section class="my-12 text-center">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">About Our Fleet</h2>
-                <p class="text-lg text-gray-400 max-w-3xl mx-auto">
-                    TUI Airways operates a modern and efficient fleet, ensuring a comfortable and safe travel experience. Our aircraft are equipped with the latest technology for a seamless journey, whether you're flying short-haul or long-haul.
-                </p>
-            </section>
-            <section class="my-12">
-                <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Boeing+737" alt="TUI Boeing 737" class="w-full h-48 object-cover">
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold text-white mb-2">Boeing 737 MAX</h3>
-                            <p class="text-gray-400">
-                                The backbone of our short- to medium-haul routes, offering a reliable and modern flying experience.
-                            </p>
+        // Define the content for each page as a function to keep it modular
+        function contentForPage(pageName) {
+            const homePageContent = () => `
+                <section class="my-12 text-center">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">About Our Fleet</h2>
+                    <p class="text-lg text-gray-400 max-w-3xl mx-auto">
+                        TUI Airways operates a modern and efficient fleet, ensuring a comfortable and safe travel experience. Our aircraft are equipped with the latest technology for a seamless journey, whether you're flying short-haul or long-haul.
+                    </p>
+                </section>
+                <section class="my-12">
+                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+                        <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Boeing+737" alt="TUI Boeing 737" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-white mb-2">Boeing 737 MAX</h3>
+                                <p class="text-gray-400">
+                                    The backbone of our short- to medium-haul routes, offering a reliable and modern flying experience.
+                                </p>
+                            </div>
+                        </div>
+                        <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
+                            <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Airbus+A320" alt="TUI Airbus A320" class="w-full h-48 object-cover">
+                            <div class="p-6">
+                                <h3 class="text-xl font-semibold text-white mb-2">Airbus A320</h3>
+                                <p class="text-gray-400">
+                                    A versatile single-aisle aircraft known for its spacious cabin and passenger-friendly features.
+                                </p>
+                            </div>
                         </div>
                     </div>
-                    <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                        <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Airbus+A320" alt="TUI Airbus A320" class="w-full h-48 object-cover">
-                        <div class="p-6">
-                            <h3 class="text-xl font-semibold text-white mb-2">Airbus A320</h3>
-                            <p class="text-gray-400">
-                                A versatile single-aisle aircraft known for its spacious cabin and passenger-friendly features.
-                            </p>
-                        </div>
-                    </div>
-                </div>
-            </section>
-            <section class="my-12 bg-[#0077b6] rounded-xl shadow-lg p-8 text-center text-white">
-                <h2 class="text-3xl font-bold mb-4">Ready for your next adventure?</h2>
-                <p class="text-lg mb-6">Discover our wide range of destinations and book your perfect holiday today.</p>
-                <a href="#" class="bg-white text-[#0077b6] font-bold py-3 px-8 rounded-full shadow-md hover:bg-gray-100 transition duration-300">
-                    Explore Destinations
-                </a>
-            </section>
-        `;
-
-        const specialAssistanceContent = () => `
-            <section class="my-12 max-w-2xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Special Assistance Request</h2>
-                ${specialAssistanceEnabled ? `
+                </section>
+                <section class="my-12 bg-[#0077b6] rounded-xl shadow-lg p-8 text-center text-white">
+                    <h2 class="text-3xl font-bold mb-4">Ready for your next adventure?</h2>
+                    <p class="text-lg mb-6">Discover our wide range of destinations and book your perfect holiday today.</p>
+                    <a href="#" class="bg-white text-[#0077b6] font-bold py-3 px-8 rounded-full shadow-md hover:bg-gray-100 transition duration-300">
+                        Explore Destinations
+                    </a>
+                </section>
+            `;
+        
+            const specialAssistanceContent = () => `
+                <section class="my-12 max-w-2xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Special Assistance Request</h2>
                     <form id="assistance-form" onsubmit="submitSpecialAssistanceForm(event)" class="space-y-6">
                         <div>
                             <label for="roblox-username" class="block text-gray-300 text-sm font-semibold mb-2">Roblox Username:</label>
@@ -588,53 +580,91 @@
                         <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
                             Submit Request
                         </button>
-                        ${isAdmin ? `<button type="button" onclick="toggleSpecialAssistance()" class="mt-4 w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                            Disable Special Assistance
-                        </button>` : ''}
                     </form>
-                ` : `
-                    <p class="text-lg text-gray-400 text-center">Special Assistance is currently disabled. Please check back later.</p>
-                    ${isAdmin ? `<button type="button" onclick="toggleSpecialAssistance()" class="mt-4 w-full bg-gray-600 hover:bg-gray-500 text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                        Enable Special Assistance
-                    </button>` : ''}
-                `}
-            </section>
-        `;
-
-        const scheduledFlightsContent = () => `
-            <section class="my-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Scheduled Flights</h2>
-                <div id="flights-list" class="space-y-6">
-                    ${scheduledFlights.length > 0 ? scheduledFlights.map(flight => `
-                        <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-                            <div class="mb-4 md:mb-0">
-                                <h3 class="text-2xl font-semibold text-white">Flight ${flight.flight}</h3>
-                                <p class="text-gray-400 text-sm">${flight.origin} to ${flight.destination}</p>
-                                <p class="text-gray-400 text-sm">Departure: ${flight.departure} | Arrival: ${flight.arrival}</p>
-                            </div>
-                            <div class="text-right">
-                                <span class="px-4 py-1 rounded-full text-sm font-bold ${flight.status === 'Scheduled' ? 'bg-green-600 text-white' : 'bg-yellow-500 text-black'}">
-                                    ${flight.status}
-                                </span>
-                                <p class="text-gray-400 text-sm mt-2">Aircraft: ${flight.aircraft}</p>
-                            </div>
-                        </div>
-                    `).join('') : `
-                        <p class="text-center text-gray-400">No scheduled flights found.</p>
-                    `}
-                </div>
-            </section>
-        `;
+                </section>
+            `;
         
-        const adminEditFlightsContent = () => `
-            <section class="my-12 max-w-2xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Admin: Edit Flights</h2>
-                <form id="admin-flight-form" onsubmit="submitNewFlight(event)" class="space-y-6">
-                    <div>
-                        <label for="flight-number" class="block text-gray-300 text-sm font-semibold mb-2">Flight Number:</label>
-                        <input type="text" id="flight-number" name="flight-number" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+            const scheduledFlightsContent = () => `
+                <section class="my-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Scheduled Flights</h2>
+                    <div id="flights-list" class="space-y-6">
+                        ${scheduledFlights.length > 0 ? scheduledFlights.map(flight => `
+                            <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
+                                <div class="mb-4 md:mb-0">
+                                    <h3 class="text-2xl font-semibold text-white">Flight ${flight.flight}</h3>
+                                    <p class="text-gray-400 text-sm">${flight.origin} to ${flight.destination}</p>
+                                    <p class="text-gray-400 text-sm">Departure: ${flight.departure ? new Date(flight.departure).toLocaleString() : 'N/A'} | Arrival: ${flight.arrival ? new Date(flight.arrival).toLocaleString() : 'N/A'}</p>
+                                </div>
+                                <div class="text-right">
+                                    <span class="px-4 py-1 rounded-full text-sm font-bold ${flight.status === 'Scheduled' ? 'bg-green-600 text-white' : 'bg-yellow-500 text-black'}">
+                                        ${flight.status}
+                                    </span>
+                                    <p class="text-gray-400 text-sm mt-2">Aircraft: ${flight.aircraft}</p>
+                                </div>
+                            </div>
+                        `).join('') : `
+                            <p class="text-center text-gray-400">No scheduled flights found.</p>
+                        `}
                     </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+                </section>
+            `;
+            
+            const discordPageContent = () => `
+                <section class="my-12 text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-2xl mx-auto">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">Join Our Discord!</h2>
+                    <p class="text-lg text-gray-400 mb-6">
+                        The Discord link will be added here soon. Stay tuned!
+                    </p>
+                </section>
+            `;
+        
+            const changelogPageContent = () => `
+                <section class="my-12">
+                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Changelog</h2>
+                    <div class="space-y-6">
+                        ${changelog.length > 0 ? changelog.map(entry => `
+                            <div class="bg-gray-800 rounded-xl shadow-lg p-6">
+                                <h4 class="text-xl font-semibold text-white">${entry.title}</h4>
+                                <p class="text-gray-400 text-sm mt-1">
+                                    ${entry.timestamp ? new Date(entry.timestamp.toDate()).toLocaleString() : 'N/A'}
+                                </p>
+                                <p class="text-gray-300 mt-4">${entry.description}</p>
+                            </div>
+                        `).join('') : `
+                            <p class="text-center text-gray-400">No changelog entries found.</p>
+                        `}
+                    </div>
+                </section>
+            `;
+        
+            // Admin pages
+            const adminLoginPageContent = () => `
+                <section class="my-12 max-w-xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Admin Login</h2>
+                    <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-6">
+                        <div>
+                            <label for="admin-code" class="block text-gray-300 text-sm font-semibold mb-2">Access Code:</label>
+                            <input type="password" id="admin-code" name="admin-code" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                        </div>
+                        <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                            Login
+                        </button>
+                    </form>
+                </section>
+            `;
+
+            const adminEditFlightsContent = () => `
+                <section class="my-12 max-w-4xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Add Scheduled Flight</h2>
+                    <form id="add-flight-form" onsubmit="addFlight(event)" class="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-6">
+                        <div>
+                            <label for="flight-number" class="block text-gray-300 text-sm font-semibold mb-2">Flight Number:</label>
+                            <input type="text" id="flight-number" name="flight-number" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                        </div>
+                        <div>
+                            <label for="aircraft" class="block text-gray-300 text-sm font-semibold mb-2">Aircraft:</label>
+                            <input type="text" id="aircraft" name="aircraft" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                        </div>
                         <div>
                             <label for="origin" class="block text-gray-300 text-sm font-semibold mb-2">Origin:</label>
                             <input type="text" id="origin" name="origin" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
@@ -643,157 +673,87 @@
                             <label for="destination" class="block text-gray-300 text-sm font-semibold mb-2">Destination:</label>
                             <input type="text" id="destination" name="destination" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
                         </div>
-                    </div>
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
                         <div>
                             <label for="departure" class="block text-gray-300 text-sm font-semibold mb-2">Departure Time:</label>
-                            <input type="text" id="departure" name="departure" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                            <input type="datetime-local" id="departure" name="departure" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
                         </div>
                         <div>
                             <label for="arrival" class="block text-gray-300 text-sm font-semibold mb-2">Arrival Time:</label>
-                            <input type="text" id="arrival" name="arrival" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                            <input type="datetime-local" id="arrival" name="arrival" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
                         </div>
-                    </div>
-                    <div>
-                        <label for="aircraft" class="block text-gray-300 text-sm font-semibold mb-2">Aircraft:</label>
-                        <input type="text" id="aircraft" name="aircraft" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                    </div>
-                    <div>
-                        <label for="date" class="block text-gray-300 text-sm font-semibold mb-2">Date:</label>
-                        <input type="date" id="date" name="date" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                    </div>
-                    <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                        Add Flight
-                    </button>
-                </form>
-            </section>
+                        <div class="md:col-span-2">
+                            <label for="status" class="block text-gray-300 text-sm font-semibold mb-2">Status:</label>
+                            <select id="status" name="status" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                                <option value="Scheduled">Scheduled</option>
+                                <option value="Delayed">Delayed</option>
+                                <option value="Departed">Departed</option>
+                                <option value="Arrived">Arrived</option>
+                            </select>
+                        </div>
+                        <div class="md:col-span-2">
+                            <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                                Add Flight
+                            </button>
+                        </div>
+                    </form>
+                </section>
+            `;
             
-            <!-- Existing Flights List -->
-            <section class="my-12">
-                <h3 class="text-2xl md:text-3xl font-bold text-gray-100 mb-6 text-center">Current Flights</h3>
-                <div id="flights-list-admin" class="space-y-6">
-                    ${scheduledFlights.length > 0 ? scheduledFlights.map(flight => `
-                        <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-                            <div class="mb-4 md:mb-0">
-                                <h4 class="text-xl font-semibold text-white">Flight ${flight.flight}</h4>
-                                <p class="text-gray-400 text-sm">${flight.origin} to ${flight.destination}</p>
-                                <p class="text-gray-400 text-sm">Departure: ${flight.departure} | Arrival: ${flight.arrival}</p>
-                            </div>
-                            <div class="flex items-center space-x-4">
-                                <span class="px-4 py-1 rounded-full text-sm font-bold bg-green-600 text-white">
-                                    ${flight.status}
-                                </span>
-                            </div>
+            const adminChangelogContent = () => `
+                <section class="my-12 max-w-4xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
+                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Add Changelog Entry</h2>
+                    <form id="add-changelog-form" onsubmit="addChangelogEntry(event)" class="space-y-6">
+                        <div>
+                            <label for="entry-title" class="block text-gray-300 text-sm font-semibold mb-2">Title:</label>
+                            <input type="text" id="entry-title" name="entry-title" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
                         </div>
-                    `).join('') : `
-                        <p class="text-center text-gray-400">No scheduled flights found.</p>
-                    `}
-                </div>
-            </section>
-        `;
-
-        const adminChangelogContent = () => `
-            <section class="my-12 max-w-2xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Admin: Update Changelog</h2>
-                <form id="admin-changelog-form" onsubmit="submitChangelogEntry(event)" class="space-y-6">
-                    <div>
-                        <label for="changelog-title" class="block text-gray-300 text-sm font-semibold mb-2">Entry Title:</label>
-                        <input type="text" id="changelog-title" name="changelog-title" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                    </div>
-                    <div>
-                        <label for="changelog-description" class="block text-gray-300 text-sm font-semibold mb-2">Description:</label>
-                        <textarea id="changelog-description" name="changelog-description" rows="4" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50"></textarea>
-                    </div>
-                    <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                        Add Entry
-                    </button>
-                </form>
-            </section>
-            
-            <!-- Existing Changelog -->
-            <section class="my-12">
-                <h3 class="text-2xl md:text-3xl font-bold text-gray-100 mb-6 text-center">Changelog History</h3>
-                <div class="space-y-6">
-                    ${changelog.length > 0 ? changelog.map(entry => `
-                        <div class="bg-gray-800 rounded-xl shadow-lg p-6">
-                            <h4 class="text-xl font-semibold text-white">${entry.title}</h4>
-                            <p class="text-gray-400 text-sm mt-1">
-                                ${entry.timestamp ? new Date(entry.timestamp.toDate()).toLocaleString() : 'N/A'}
-                            </p>
-                            <p class="text-gray-300 mt-4">${entry.description}</p>
+                        <div>
+                            <label for="entry-description" class="block text-gray-300 text-sm font-semibold mb-2">Description:</label>
+                            <textarea id="entry-description" name="entry-description" rows="5" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50"></textarea>
                         </div>
-                    `).join('') : `
-                        <p class="text-center text-gray-400">No changelog entries found.</p>
-                    `}
-                </div>
-            </section>
-        `;
+                        <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
+                            Add Entry
+                        </button>
+                    </form>
+                </section>
+            `;
 
-        const discordPageContent = () => `
-            <section class="my-12 text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-2xl mx-auto">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">Join Our Discord!</h2>
-                <p class="text-lg text-gray-400 mb-6">
-                    The Discord link will be added here soon. Stay tuned!
-                </p>
-            </section>
-        `;
-
-        const changelogPageContent = () => `
-            <section class="my-12">
-                <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Changelog</h2>
-                <div class="space-y-6">
-                    ${changelog.length > 0 ? changelog.map(entry => `
-                        <div class="bg-gray-800 rounded-xl shadow-lg p-6">
-                            <h4 class="text-xl font-semibold text-white">${entry.title}</h4>
-                            <p class="text-gray-400 text-sm mt-1">
-                                ${entry.timestamp ? new Date(entry.timestamp.toDate()).toLocaleString() : 'N/A'}
-                            </p>
-                            <p class="text-gray-300 mt-4">${entry.description}</p>
-                        </div>
-                    `).join('') : `
-                        <p class="text-center text-gray-400">No changelog entries found.</p>
-                    `}
-                </div>
-            </section>
-        `;
-
-        // Function to load content based on page name
-        function loadPage(pageName) {
-            mainContent.dataset.currentPage = pageName;
             switch (pageName) {
                 case 'home':
-                    mainContent.innerHTML = homePageContent();
-                    break;
-                case 'scheduled-flights':
-                    mainContent.innerHTML = scheduledFlightsContent();
-                    break;
+                    return homePageContent();
                 case 'special-assistance':
-                    mainContent.innerHTML = specialAssistanceContent();
-                    break;
-                case 'admin-flights':
-                    if (isAdmin) {
-                        mainContent.innerHTML = adminEditFlightsContent();
-                    } else {
-                        loadPage('home'); // Redirect if not admin
-                    }
-                    break;
-                case 'admin-changelog':
-                    if (isAdmin) {
-                        mainContent.innerHTML = adminChangelogContent();
-                    } else {
-                        loadPage('home'); // Redirect if not admin
-                    }
-                    break;
+                    return specialAssistanceContent();
+                case 'scheduled-flights':
+                    return scheduledFlightsContent();
                 case 'discord':
-                    mainContent.innerHTML = discordPageContent();
-                    break;
+                    return discordPageContent();
                 case 'changelog':
-                    mainContent.innerHTML = changelogPageContent();
-                    break;
+                    return changelogPageContent();
+                case 'admin-login':
+                    return adminLoginPageContent();
+                case 'admin-flights':
+                    return isAdmin ? adminEditFlightsContent() : homePageContent();
+                case 'admin-changelog':
+                    return isAdmin ? adminChangelogContent() : homePageContent();
                 default:
-                    mainContent.innerHTML = homePageContent();
-                    break;
+                    return homePageContent();
             }
+        }
+
+        // Function to load content dynamically
+        function loadPage(pageName) {
+            if (pageName.startsWith('admin-') && !isAdmin && pageName !== 'admin-login') {
+                showModal("Please log in as an administrator to access this page.", false);
+                loadPage('admin-login');
+                return;
+            }
+            mainContent.dataset.currentPage = pageName;
+            mainContent.innerHTML = contentForPage(pageName);
+        }
+
+        // Initial page load
+        if (isAuthReady) {
+            loadPage('home');
         }
     </script>
 </body>
