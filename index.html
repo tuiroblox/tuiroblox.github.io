@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>TUI Airways</title>
+    <title>Norwegian Air Shuttle</title>
     <!-- Tailwind CSS for a modern, utility-first styling approach -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Google Fonts for a clean and professional font -->
@@ -11,11 +11,21 @@
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;600;800&display=swap" rel="stylesheet">
     <style>
+        /* Norwegian Air's main colors are red, white, and blue */
         body {
             font-family: 'Inter', sans-serif;
-            background-color: #0b1a2c; /* Deep space blue background */
-            color: #e2e8f0; /* Off-white text color */
+            background-color: #ffffff; /* White background */
+            color: #1a202c; /* Dark text color */
         }
+        
+        .bg-norwegian-red {
+            background-color: #ff0000;
+        }
+
+        .text-norwegian-red {
+            color: #ff0000;
+        }
+        
         /* Custom styles for the nav and main content */
         .taskbar {
             top: 1rem;
@@ -23,12 +33,12 @@
             transform: translateX(-50%);
             width: 4rem;
             transition: width 0.3s ease-in-out, background-color 0.3s ease-in-out;
-            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.4);
+            box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
             z-index: 50;
         }
         .taskbar:hover {
             width: clamp(20rem, 80%, 65rem); /* Responsive width for taskbar */
-            background-color: #003366; /* Darker blue on hover */
+            background-color: #ff0000; /* Norwegian red on hover */
         }
         .taskbar-content {
             opacity: 0;
@@ -67,14 +77,15 @@
             justify-content: center;
         }
         .modal-content {
-            background-color: #1a202c;
+            background-color: #ffffff;
             padding: 24px;
             border-radius: 12px;
             box-shadow: 0 8px 32px 0 rgba(31, 38, 135, 0.37);
-            border: 1px solid rgba(255, 255, 255, 0.18);
+            border: 1px solid rgba(0, 0, 0, 0.1);
             text-align: center;
             max-width: 400px;
             width: 90%;
+            color: #1a202c;
         }
         .close-button {
             float: right;
@@ -85,14 +96,14 @@
         }
         .close-button:hover,
         .close-button:focus {
-            color: #fff;
+            color: #000;
             text-decoration: none;
             cursor: pointer;
         }
         /* Style for the loading spinner */
         .loader {
             border: 4px solid #f3f3f3;
-            border-top: 4px solid #0077b6;
+            border-top: 4px solid #ff0000; /* Red spinner */
             border-radius: 50%;
             width: 40px;
             height: 40px;
@@ -109,15 +120,15 @@
     <!-- Hero Section -->
     <header class="relative w-full h-[60vh] md:h-[70vh] flex items-center justify-center text-white overflow-hidden">
         <!-- Background image with an overlay using a placeholder -->
-        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/003366/ffffff?text=TUI+737+Hero+Image');"></div>
-        <div class="absolute inset-0 bg-black opacity-60"></div>
+        <div class="absolute inset-0 bg-cover bg-center" style="background-image: url('https://placehold.co/1920x1080/ff0000/ffffff?text=Norwegian+Air+787+Dreamliner');"></div>
+        <div class="absolute inset-0 bg-black opacity-40"></div>
 
         <div class="relative z-10 text-center p-4">
             <h1 class="text-4xl md:text-6xl lg:text-7xl font-extrabold tracking-tight">
-                TUI Airways
+                Norwegian Air Shuttle
             </h1>
-            <p class="mt-4 text-lg md:text-xl font-medium text-gray-300">
-                Your journey to amazing destinations begins here.
+            <p class="mt-4 text-lg md:text-xl font-medium text-gray-200">
+                Affordable travel to destinations worldwide.
             </p>
         </div>
     </header>
@@ -131,22 +142,22 @@
     </main>
 
     <!-- The rounded pill-shaped taskbar at the top -->
-    <div class="taskbar fixed flex items-center justify-center bg-gray-900 bg-opacity-70 backdrop-blur-sm text-white rounded-full p-2 cursor-pointer hover:p-3">
-        <!-- TUI Logo, replacing the SVG icon -->
+    <div class="taskbar fixed flex items-center justify-center bg-norwegian-red bg-opacity-90 backdrop-blur-sm text-white rounded-full p-2 cursor-pointer hover:p-3">
+        <!-- Norwegian Logo -->
         <div class="taskbar-icon w-10 h-10 flex items-center justify-center p-1 transition-opacity duration-300">
-            <!-- Placeholder for TUI Logo image. Replace with a direct image URL. -->
-            <img src="https://placehold.co/100x100/f37021/ffffff?text=TUI" alt="TUI Logo" class="w-full h-full object-contain">
+            <!-- Placeholder for Norwegian Logo -->
+            <img src="https://placehold.co/100x100/ffffff/ff0000?text=Norwegian" alt="Norwegian Logo" class="w-full h-full object-contain">
         </div>
 
         <!-- Expanded content, initially hidden -->
         <div id="taskbar-content" class="taskbar-content flex-grow flex items-center justify-around space-x-6 text-sm whitespace-nowrap px-4">
-            <a onclick="loadPage('home')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+            <a onclick="loadPage('home')" class="font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-home">
                     <path d="M12 2l-9 9v11h6v-7h6v7h6v-11z"/>
                 </svg>
                 <span>Home</span>
             </a>
-            <a onclick="loadPage('special-assistance')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+            <a onclick="loadPage('special-assistance')" class="font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-accessible">
                     <circle cx="12" cy="12" r="10"/>
                     <path d="M16 12a4 4 0 0 1-4 4H8a4 4 0 0 1-4-4V8a4 4 0 0 1 4-4h4a4 4 0 0 1 4 4v4z"/>
@@ -155,7 +166,7 @@
                 </svg>
                 <span>Book Assistance</span>
             </a>
-            <a onclick="loadPage('changelog')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+            <a onclick="loadPage('changelog')" class="font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-list">
                     <rect width="8" height="4" x="8" y="2" rx="1" ry="1"/>
                     <path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/>
@@ -166,13 +177,13 @@
                 </svg>
                 <span>Changelog</span>
             </a>
-            <a onclick="loadPage('discord')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+            <a onclick="loadPage('discord')" class="font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-message-square">
                     <path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"/>
                 </svg>
                 <span>Discord Server</span>
             </a>
-            <a onclick="loadPage('scheduled-flights')" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+            <a onclick="loadPage('scheduled-flights')" class="font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-calendar-days">
                     <path d="M8 2v4"/>
                     <path d="M16 2v4"/>
@@ -187,7 +198,7 @@
                 </svg>
                 <span>Scheduled Flights</span>
             </a>
-            <a id="admin-link" onclick="handleAdminLink()" class="font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200">
+            <a id="admin-link" onclick="handleAdminLink()" class="font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200">
                 <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-user-cog">
                     <circle cx="12" cy="7" r="4"/>
                     <path d="M16 19c0-2.2-3.6-4-8-4s-8 1.8-8 4"/>
@@ -409,13 +420,13 @@
 
                 const adminFlightsLink = document.createElement('a');
                 adminFlightsLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-edit"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"/><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"/></svg><span>Edit Flights</span>`;
-                adminFlightsLink.className = "font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200";
+                adminFlightsLink.className = "font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200";
                 adminFlightsLink.onclick = () => loadPage('admin-flights');
                 adminFlightsLink.dataset.adminLink = "true";
 
                 const adminChangelogLink = document.createElement('a');
                 adminChangelogLink.innerHTML = `<svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-clipboard-plus"><rect width="8" height="4" x="8" y="2" rx="1" ry="1"/><path d="M16 4h2a2 2 0 0 1 2 2v14a2 2 0 0 1-2 2H6a2 2 0 0 1-2-2V6a2 2 0 0 1 2-2h2"/><path d="M12 11v6"/><path d="M9 14h6"/></svg><span>Add Changelog</span>`;
-                adminChangelogLink.className = "font-medium flex items-center space-x-2 hover:text-gray-300 transition-colors duration-200";
+                adminChangelogLink.className = "font-medium flex items-center space-x-2 hover:text-gray-200 transition-colors duration-200";
                 adminChangelogLink.onclick = () => loadPage('admin-changelog');
                 adminChangelogLink.dataset.adminLink = "true";
 
@@ -451,14 +462,12 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
             const formData = {
-                flight: form.elements['flight-number'].value,
-                aircraft: form.elements['aircraft'].value,
+                flightNumber: form.elements['flight-number'].value,
                 origin: form.elements['origin'].value,
                 destination: form.elements['destination'].value,
-                departure: form.elements['departure'].value,
-                arrival: form.elements['arrival'].value,
-                status: form.elements['status'].value,
-                createdAt: serverTimestamp()
+                departureTime: form.elements['departure-time'].value,
+                arrivalTime: form.elements['arrival-time'].value,
+                addedAt: serverTimestamp(),
             };
             try {
                 const collectionPath = `artifacts/${appId}/public/data/scheduled_flights`;
@@ -466,8 +475,8 @@
                 showModal("Flight added successfully!");
                 form.reset();
             } catch (e) {
-                console.error("Error adding flight: ", e);
-                showModal("Error adding flight. Please try again.");
+                console.error("Error adding document: ", e);
+                showModal("Error adding flight.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Add Flight';
@@ -475,39 +484,25 @@
         }
 
         // Delete Flight functionality
-        async function deleteFlight(id) {
+        async function deleteFlight(docId) {
             if (!isAdmin) {
                 showModal("You must be an admin to delete a flight.");
                 return;
             }
-            // Use a custom modal for confirmation instead of alert/confirm
-            const confirmDelete = await new Promise(resolve => {
-                const modal = document.getElementById('feedback-modal');
-                const modalMessage = document.getElementById('modal-message');
-                modalMessage.innerHTML = `
-                    <p class="text-xl font-semibold mt-4 text-red-500">Are you sure you want to delete this flight?</p>
-                    <div class="flex justify-center space-x-4 mt-6">
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onclick="document.getElementById('feedback-modal').style.display='none'; resolve(true);">Yes, Delete</button>
-                        <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full" onclick="document.getElementById('feedback-modal').style.display='none'; resolve(false);">Cancel</button>
-                    </div>
-                `;
-                modal.style.display = 'flex';
-            });
-
-            if (!confirmDelete) {
+            if (!confirm("Are you sure you want to delete this flight?")) {
                 return;
             }
-
             try {
-                await deleteDoc(doc(db, `artifacts/${appId}/public/data/scheduled_flights`, id));
+                const docRef = doc(db, `artifacts/${appId}/public/data/scheduled_flights`, docId);
+                await deleteDoc(docRef);
                 showModal("Flight deleted successfully!");
             } catch (e) {
-                console.error("Error deleting flight: ", e);
-                showModal("Error deleting flight. Please try again.");
+                console.error("Error deleting document: ", e);
+                showModal("Error deleting flight.");
             }
         }
-        
-        // Add Changelog entry functionality
+
+        // Add Changelog Entry functionality
         async function addChangelogEntry(event) {
             event.preventDefault();
             if (!isAdmin) {
@@ -519,304 +514,307 @@
             submitBtn.disabled = true;
             submitBtn.textContent = 'Adding...';
             const formData = {
-                title: form.elements['entry-title'].value,
-                description: form.elements['entry-description'].value,
-                timestamp: serverTimestamp()
+                version: form.elements['changelog-version'].value,
+                description: form.elements['changelog-description'].value,
+                timestamp: serverTimestamp(),
             };
             try {
-                await addDoc(collection(db, `artifacts/${appId}/public/data/changelog`), formData);
+                const collectionPath = `artifacts/${appId}/public/data/changelog`;
+                await addDoc(collection(db, collectionPath), formData);
                 showModal("Changelog entry added successfully!");
                 form.reset();
             } catch (e) {
-                console.error("Error adding changelog entry: ", e);
-                showModal("Error adding changelog entry. Please try again.");
+                console.error("Error adding document: ", e);
+                showModal("Error adding changelog entry.");
             } finally {
                 submitBtn.disabled = false;
                 submitBtn.textContent = 'Add Entry';
             }
         }
 
-        // Delete Changelog entry functionality
-        async function deleteChangelogEntry(id) {
+        // Delete Changelog Entry functionality
+        async function deleteChangelogEntry(docId) {
             if (!isAdmin) {
                 showModal("You must be an admin to delete a changelog entry.");
                 return;
             }
-            // Use a custom modal for confirmation instead of alert/confirm
-            const confirmDelete = await new Promise(resolve => {
-                const modal = document.getElementById('feedback-modal');
-                const modalMessage = document.getElementById('modal-message');
-                modalMessage.innerHTML = `
-                    <p class="text-xl font-semibold mt-4 text-red-500">Are you sure you want to delete this changelog entry?</p>
-                    <div class="flex justify-center space-x-4 mt-6">
-                        <button class="bg-red-600 hover:bg-red-700 text-white font-bold py-2 px-4 rounded-full" onclick="document.getElementById('feedback-modal').style.display='none'; resolve(true);">Yes, Delete</button>
-                        <button class="bg-gray-600 hover:bg-gray-700 text-white font-bold py-2 px-4 rounded-full" onclick="document.getElementById('feedback-modal').style.display='none'; resolve(false);">Cancel</button>
-                    </div>
-                `;
-                modal.style.display = 'flex';
-            });
-
-            if (!confirmDelete) {
+            if (!confirm("Are you sure you want to delete this changelog entry?")) {
                 return;
             }
-
             try {
-                await deleteDoc(doc(db, `artifacts/${appId}/public/data/changelog`, id));
+                const docRef = doc(db, `artifacts/${appId}/public/data/changelog`, docId);
+                await deleteDoc(docRef);
                 showModal("Changelog entry deleted successfully!");
             } catch (e) {
-                console.error("Error deleting changelog entry: ", e);
-                showModal("Error deleting changelog entry. Please try again.");
+                console.error("Error deleting document: ", e);
+                showModal("Error deleting changelog entry.");
             }
         }
 
-        // Define the content for each page as a function to keep it modular
+
+        // Function to return HTML content for each page
         function contentForPage(pageName) {
             const homePageContent = () => `
-                <section class="my-12 text-center">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-8">About Our Fleet</h2>
-                    <p class="text-lg text-gray-400 max-w-3xl mx-auto">
-                        TUI Airways operates a modern and efficient fleet, ensuring a comfortable and safe travel experience. Our aircraft are equipped with the latest technology for a seamless journey, whether you're flying short-haul or long-haul.
+                <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                    <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Welcome to Norwegian Air Shuttle</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed">
+                        Fly to exciting destinations across Europe and beyond with Norwegian's modern fleet. Enjoy a comfortable journey with our friendly crew and a variety of in-flight services.
                     </p>
-                </section>
-                <section class="my-12">
-                    <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
-                        <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Boeing+737" alt="TUI Boeing 737" class="w-full h-48 object-cover">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold text-white mb-2">Boeing 737 MAX</h3>
-                                <p class="text-gray-400">
-                                    The backbone of our short- to medium-haul routes, offering a reliable and modern flying experience.
-                                </p>
-                            </div>
+                    <div class="mt-8 grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+                        <!-- Card 1 -->
+                        <div class="bg-gray-100 p-6 rounded-lg shadow-md border-l-4 border-norwegian-red">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Book Your Next Adventure</h3>
+                            <p class="text-gray-600">Find the best deals and book your next flight to your dream destination with ease. Our streamlined booking process makes it simple.</p>
                         </div>
-                        <div class="bg-gray-800 rounded-xl shadow-lg overflow-hidden transition-transform transform hover:scale-105">
-                            <img src="https://placehold.co/600x400/0077b6/ffffff?text=TUI+Airbus+A320" alt="TUI Airbus A320" class="w-full h-48 object-cover">
-                            <div class="p-6">
-                                <h3 class="text-xl font-semibold text-white mb-2">Airbus A320</h3>
-                                <p class="text-gray-400">
-                                    A versatile single-aisle aircraft known for its spacious cabin and passenger-friendly features.
-                                </p>
-                            </div>
+                        <!-- Card 2 -->
+                        <div class="bg-gray-100 p-6 rounded-lg shadow-md border-l-4 border-norwegian-red">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">Manage Your Booking</h3>
+                            <p class="text-gray-600">View your trip details, check-in online, and add extra services to your booking, all from your personalized travel page.</p>
+                        </div>
+                        <!-- Card 3 -->
+                        <div class="bg-gray-100 p-6 rounded-lg shadow-md border-l-4 border-norwegian-red">
+                            <h3 class="text-xl font-bold text-gray-900 mb-2">In-flight Services</h3>
+                            <p class="text-gray-600">Discover our range of on-board services, including delicious snacks and beverages, and comfortable seating options.</p>
                         </div>
                     </div>
-                </section>
-                <section class="my-12 bg-[#0077b6] rounded-xl shadow-lg p-8 text-center text-white">
-                    <h2 class="text-3xl font-bold mb-4">Ready for your next adventure?</h2>
-                    <p class="text-lg mb-6">Discover our wide range of destinations and book your perfect holiday today.</p>
-                    <a href="#" class="bg-white text-[#0077b6] font-bold py-3 px-8 rounded-full shadow-md hover:bg-gray-100 transition duration-300">
-                        Explore Destinations
-                    </a>
                 </section>
             `;
 
             const specialAssistanceContent = () => `
-                <section class="my-12 max-w-2xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Special Assistance Request</h2>
-                    <form id="assistance-form" onsubmit="submitSpecialAssistanceForm(event)" class="space-y-6">
+                <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                    <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Special Assistance Booking</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        We are committed to making your journey as smooth as possible. Please fill out the form below to request special assistance for your flight.
+                    </p>
+                    <form id="assistance-form" onsubmit="submitSpecialAssistanceForm(event)" class="space-y-4">
                         <div>
-                            <label for="roblox-username" class="block text-gray-300 text-sm font-semibold mb-2">Roblox Username:</label>
-                            <input type="text" id="roblox-username" name="roblox-username" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                            <label for="roblox-username" class="block text-sm font-medium text-gray-700">Roblox Username</label>
+                            <input type="text" id="roblox-username" name="roblox-username" required
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red sm:text-sm">
                         </div>
                         <div>
-                            <label for="flight-number" class="block text-gray-300 text-sm font-semibold mb-2">Flight Number:</label>
-                            <input type="text" id="flight-number" name="flight-number" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                            <label for="flight-number" class="block text-sm font-medium text-gray-700">Flight Number</label>
+                            <input type="text" id="flight-number" name="flight-number" required
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red sm:text-sm">
                         </div>
                         <div>
-                            <label for="assistance-type" class="block text-gray-300 text-sm font-semibold mb-2">Type of Assistance:</label>
-                            <select id="assistance-type" name="assistance-type" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                                <option value="" disabled selected>Select an option</option>
-                                <option value="wheelchair">Wheelchair Assistance</option>
-                                <option value="visual">Visual Impairment</option>
-                                <option value="hearing">Hearing Impairment</option>
+                            <label for="assistance-type" class="block text-sm font-medium text-gray-700">Type of Assistance</label>
+                            <select id="assistance-type" name="assistance-type" required
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red sm:text-sm">
+                                <option value="">Select one...</option>
+                                <option value="wheelchair">Wheelchair</option>
+                                <option value="mobility-aid">Mobility Aid</option>
+                                <option value="visual-impairment">Visual Impairment</option>
+                                <option value="hearing-impairment">Hearing Impairment</option>
+                                <option value="unaccompanied-minor">Unaccompanied Minor</option>
                                 <option value="other">Other</option>
                             </select>
                         </div>
                         <div>
-                            <label for="details" class="block text-gray-300 text-sm font-semibold mb-2">Additional Details:</label>
-                            <textarea id="details" name="details" rows="4" class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50" placeholder="Please provide any additional information here..."></textarea>
+                            <label for="details" class="block text-sm font-medium text-gray-700">Additional Details</label>
+                            <textarea id="details" name="details" rows="4"
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red sm:text-sm"></textarea>
                         </div>
-                        <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                            Submit Request
-                        </button>
-                    </form>
-                </section>
-            `;
-
-            const scheduledFlightsContent = () => `
-                <section class="my-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Scheduled Flights</h2>
-                    <div id="flights-list" class="space-y-6">
-                        ${scheduledFlights.length > 0 ? scheduledFlights.map(flight => `
-                            <div class="bg-gray-800 rounded-xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-                                <div class="mb-4 md:mb-0">
-                                    <h3 class="text-2xl font-semibold text-white">Flight ${flight.flight}</h3>
-                                    <p class="text-gray-400 text-sm">${flight.origin} to ${flight.destination}</p>
-                                    <p class="text-gray-400 text-sm">Departure: ${flight.departure ? new Date(flight.departure).toLocaleString() : 'N/A'} | Arrival: ${flight.arrival ? new Date(flight.arrival).toLocaleString() : 'N/A'}</p>
-                                </div>
-                                <div class="text-right">
-                                    <span class="px-4 py-1 rounded-full text-sm font-bold ${flight.status === 'Scheduled' ? 'bg-green-600 text-white' : 'bg-yellow-500 text-black'}">
-                                        ${flight.status}
-                                    </span>
-                                    <p class="text-gray-400 text-sm mt-2">Aircraft: ${flight.aircraft}</p>
-                                </div>
-                            </div>
-                        `).join('') : `
-                            <p class="text-center text-gray-400">No scheduled flights found.</p>
-                        `}
-                    </div>
-                </section>
-            `;
-
-            const discordPageContent = () => `
-                <section class="my-12 text-center p-8 bg-gray-800 rounded-xl shadow-lg max-w-2xl mx-auto">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-4">Join Our Discord!</h2>
-                    <p class="text-lg text-gray-400 mb-6">
-                        The Discord link will be added here soon. Stay tuned!
-                    </p>
-                </section>
-            `;
-
-            const changelogPageContent = () => `
-                <section class="my-12">
-                    <h2 class="text-3xl md:text-4xl font-bold text-gray-100 mb-6 text-center">Changelog</h2>
-                    <div class="space-y-6">
-                        ${changelog.length > 0 ? changelog.map(entry => `
-                            <div class="bg-gray-800 rounded-xl shadow-lg p-6">
-                                <h4 class="text-xl font-semibold text-white">${entry.title}</h4>
-                                <p class="text-gray-400 text-sm mt-1">
-                                    ${entry.timestamp ? new Date(entry.timestamp.toDate()).toLocaleString() : 'N/A'}
-                                </p>
-                                <p class="text-gray-300 mt-4">${entry.description}</p>
-                            </div>
-                        `).join('') : `
-                            <p class="text-center text-gray-400">No changelog entries found.</p>
-                        `}
-                    </div>
-                </section>
-            `;
-
-            // Admin pages
-            const adminLoginPageContent = () => `
-                <section class="my-12 max-w-xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Admin Login</h2>
-                    <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-6">
-                        <div>
-                            <label for="admin-code" class="block text-gray-300 text-sm font-semibold mb-2">Access Code:</label>
-                            <input type="password" id="admin-code" name="admin-code" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                            Login
-                        </button>
-                    </form>
-                </section>
-            `;
-
-            const adminEditFlightsContent = () => `
-                <section class="my-12 max-w-4xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Add Scheduled Flight</h2>
-                    <form id="add-flight-form" onsubmit="addFlight(event)" class="space-y-6 grid grid-cols-1 md:grid-cols-2 gap-6 mb-12">
-                        <div>
-                            <label for="flight-number" class="block text-gray-300 text-sm font-semibold mb-2">Flight Number:</label>
-                            <input type="text" id="flight-number" name="flight-number" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="aircraft" class="block text-gray-300 text-sm font-semibold mb-2">Aircraft:</label>
-                            <input type="text" id="aircraft" name="aircraft" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="origin" class="block text-gray-300 text-sm font-semibold mb-2">Origin:</label>
-                            <input type="text" id="origin" name="origin" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="destination" class="block text-gray-300 text-sm font-semibold mb-2">Destination:</label>
-                            <input type="text" id="destination" name="destination" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="departure" class="block text-gray-300 text-sm font-semibold mb-2">Departure Time:</label>
-                            <input type="datetime-local" id="departure" name="departure" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <div>
-                            <label for="arrival" class="block text-gray-300 text-sm font-semibold mb-2">Arrival Time:</label>
-                            <input type="datetime-local" id="arrival" name="arrival" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                        </div>
-                        <div class="md:col-span-2">
-                            <label for="status" class="block text-gray-300 text-sm font-semibold mb-2">Status:</label>
-                            <select id="status" name="status" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
-                                <option value="Scheduled">Scheduled</option>
-                                <option value="Delayed">Delayed</option>
-                                <option value="Departed">Departed</option>
-                                <option value="Arrived">Arrived</option>
-                            </select>
-                        </div>
-                        <div class="md:col-span-2">
-                            <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                                Add Flight
+                        <div class="flex justify-end">
+                            <button type="submit"
+                                class="inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-norwegian-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Submit Request
                             </button>
                         </div>
                     </form>
+                </section>
+            `;
 
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center mt-12">Existing Flights</h2>
-                    <div id="existing-flights-list" class="space-y-6">
-                        ${scheduledFlights.length > 0 ? scheduledFlights.map(flight => `
-                            <div class="bg-gray-700 rounded-xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-                                <div class="mb-4 md:mb-0">
-                                    <h3 class="text-xl font-semibold text-white">Flight ${flight.flight} (${flight.origin} to ${flight.destination})</h3>
-                                    <p class="text-gray-300 text-sm">Aircraft: ${flight.aircraft}</p>
-                                    <p class="text-gray-300 text-sm">Departure: ${flight.departure ? new Date(flight.departure).toLocaleString() : 'N/A'}</p>
-                                    <p class="text-gray-300 text-sm">Arrival: ${flight.arrival ? new Date(flight.arrival).toLocaleString() : 'N/A'}</p>
-                                    <span class="px-3 py-1 rounded-full text-xs font-bold ${flight.status === 'Scheduled' ? 'bg-green-600 text-white' : 'bg-yellow-500 text-black'}">
-                                        ${flight.status}
-                                    </span>
-                                </div>
-                                <button onclick="deleteFlight('${flight.id}')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-                                    Delete
-                                </button>
+            const scheduledFlightsContent = () => {
+                // Sort flights by departure time
+                const sortedFlights = [...scheduledFlights].sort((a, b) => new Date(a.departureTime) - new Date(b.departureTime));
+
+                const flightList = sortedFlights.length > 0
+                    ? sortedFlights.map(flight => `
+                        <li class="bg-gray-100 p-6 rounded-lg shadow-sm border border-gray-200 hover:shadow-md transition-shadow">
+                            <div class="flex justify-between items-center mb-2">
+                                <h3 class="text-xl font-bold text-norwegian-red">Flight ${flight.flightNumber}</h3>
+                                <span class="text-sm text-gray-500">${new Date(flight.departureTime).toLocaleDateString()}</span>
                             </div>
-                        `).join('') : `
-                            <p class="text-center text-gray-400">No existing flights to manage.</p>
-                        `}
+                            <p class="text-lg text-gray-800">
+                                <span class="font-semibold">${flight.origin}</span> to <span class="font-semibold">${flight.destination}</span>
+                            </p>
+                            <p class="text-gray-600 mt-2">
+                                <span class="font-medium">Departs:</span> ${flight.departureTime} <br>
+                                <span class="font-medium">Arrives:</span> ${flight.arrivalTime}
+                            </p>
+                        </li>
+                    `).join('')
+                    : `<li class="text-center text-gray-500 p-8">No scheduled flights at this time.</li>`;
+
+                return `
+                    <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                        <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Scheduled Flights</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                            Check out our upcoming flights and plan your next journey.
+                        </p>
+                        <ul class="space-y-4">
+                            ${flightList}
+                        </ul>
+                    </section>
+                `;
+            };
+
+            const discordPageContent = () => `
+                <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                    <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Join Our Discord Server</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        Become a part of our community! Join the official Norwegian Air Shuttle Discord server to connect with fellow passengers, get the latest updates, and participate in events.
+                    </p>
+                    <div class="flex justify-center">
+                        <a href="https://discord.gg/your-server-link" target="_blank"
+                            class="inline-flex items-center px-8 py-4 border border-transparent text-lg font-medium rounded-full text-white bg-norwegian-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500 transition-colors duration-200">
+                            Join Now
+                        </a>
                     </div>
                 </section>
             `;
 
-            const adminChangelogContent = () => `
-                <section class="my-12 max-w-4xl mx-auto p-8 bg-gray-800 rounded-xl shadow-lg">
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center">Add Changelog Entry</h2>
-                    <form id="add-changelog-form" onsubmit="addChangelogEntry(event)" class="space-y-6 mb-12">
+            const changelogPageContent = () => {
+                const changelogList = changelog.length > 0
+                    ? changelog.map(entry => `
+                        <li class="bg-gray-100 p-6 rounded-lg shadow-sm border border-gray-200">
+                            <h3 class="text-xl font-bold text-norwegian-red mb-1">Version ${entry.version}</h3>
+                            <p class="text-gray-600 mb-2">
+                                ${new Date(entry.timestamp?.toDate()).toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}
+                            </p>
+                            <p class="text-gray-800 leading-relaxed">${entry.description}</p>
+                        </li>
+                    `).join('')
+                    : `<li class="text-center text-gray-500 p-8">No changelog entries yet.</li>`;
+
+                return `
+                    <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                        <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Changelog</h2>
+                        <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                            Stay up to date with the latest updates and features on our website.
+                        </p>
+                        <ul class="space-y-4">
+                            ${changelogList}
+                        </ul>
+                    </section>
+                `;
+            };
+
+            const adminLoginPageContent = () => `
+                <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                    <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Admin Login</h2>
+                    <p class="text-lg text-gray-700 leading-relaxed mb-6">
+                        Enter your administrative access code to log in and manage the website content.
+                    </p>
+                    <form id="admin-login-form" onsubmit="handleAdminLogin(event)" class="space-y-4 max-w-sm mx-auto">
                         <div>
-                            <label for="entry-title" class="block text-gray-300 text-sm font-semibold mb-2">Title:</label>
-                            <input type="text" id="entry-title" name="entry-title" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50">
+                            <label for="admin-code" class="sr-only">Access Code</label>
+                            <input type="password" id="admin-code" name="admin-code" placeholder="Enter Access Code" required
+                                class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red sm:text-sm">
                         </div>
-                        <div>
-                            <label for="entry-description" class="block text-gray-300 text-sm font-semibold mb-2">Description:</label>
-                            <textarea id="entry-description" name="entry-description" rows="5" required class="w-full p-3 rounded-md bg-gray-700 text-white border-gray-600 focus:border-[#0077b6] focus:ring focus:ring-[#0077b6] focus:ring-opacity-50"></textarea>
+                        <div class="flex justify-center">
+                            <button type="submit"
+                                class="inline-flex justify-center py-2 px-6 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-norwegian-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                Log In
+                            </button>
                         </div>
-                        <button type="submit" class="w-full bg-[#f37021] hover:bg-[#d4611d] text-white font-bold py-3 px-6 rounded-full transition duration-300">
-                            Add Entry
-                        </button>
                     </form>
-
-                    <h2 class="text-3xl md:text-4xl font-bold text-white mb-6 text-center mt-12">Existing Changelog Entries</h2>
-                    <div id="existing-changelog-list" class="space-y-6">
-                        ${changelog.length > 0 ? changelog.map(entry => `
-                            <div class="bg-gray-700 rounded-xl shadow-lg p-6 flex flex-col md:flex-row justify-between items-start md:items-center">
-                                <div class="mb-4 md:mb-0">
-                                    <h4 class="text-xl font-semibold text-white">${entry.title}</h4>
-                                    <p class="text-gray-300 text-sm mt-1">
-                                        ${entry.timestamp ? new Date(entry.timestamp.toDate()).toLocaleString() : 'N/A'}
-                                    </p>
-                                    <p class="text-gray-300 mt-4">${entry.description}</p>
-                                </div>
-                                <button onclick="deleteChangelogEntry('${entry.id}')" class="bg-red-500 hover:bg-red-600 text-white font-bold py-2 px-4 rounded-full transition duration-300">
-                                    Delete
-                                </button>
-                            </div>
-                        `).join('') : `
-                            <p class="text-center text-gray-400">No existing changelog entries to manage.</p>
-                        `}
-                    </div>
                 </section>
             `;
+
+            const adminEditFlightsContent = () => {
+                const flightList = scheduledFlights.length > 0
+                    ? scheduledFlights.map(flight => `
+                        <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="font-semibold text-norwegian-red">Flight ${flight.flightNumber}: ${flight.origin} -> ${flight.destination}</p>
+                                <p class="text-sm text-gray-600">${flight.departureTime} - ${flight.arrivalTime}</p>
+                            </div>
+                            <button onclick="deleteFlight('${flight.id}')" class="text-red-500 hover:text-red-700 font-bold">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </li>
+                    `).join('')
+                    : `<li class="text-center text-gray-500 p-8">No flights to display.</li>`;
+
+                return `
+                    <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                        <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Admin: Edit Flights</h2>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Add New Flight</h3>
+                            <form id="add-flight-form" onsubmit="addFlight(event)" class="space-y-4">
+                                <input type="text" name="flight-number" placeholder="Flight Number (e.g., NA123)" required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red">
+                                <input type="text" name="origin" placeholder="Origin (e.g., Oslo)" required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red">
+                                <input type="text" name="destination" placeholder="Destination (e.g., London)" required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red">
+                                <input type="datetime-local" name="departure-time" required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red">
+                                <input type="datetime-local" name="arrival-time" required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red">
+                                <button type="submit"
+                                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-norwegian-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Add Flight
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Existing Flights</h3>
+                            <ul class="space-y-2">
+                                ${flightList}
+                            </ul>
+                        </div>
+                    </section>
+                `;
+            };
+
+            const adminChangelogContent = () => {
+                const changelogList = changelog.length > 0
+                    ? changelog.map(entry => `
+                        <li class="bg-gray-100 p-4 rounded-lg shadow-sm flex items-center justify-between">
+                            <div>
+                                <p class="font-semibold text-norwegian-red">Version ${entry.version}</p>
+                                <p class="text-sm text-gray-600">${entry.description}</p>
+                            </div>
+                            <button onclick="deleteChangelogEntry('${entry.id}')" class="text-red-500 hover:text-red-700 font-bold">
+                                <svg xmlns="http://www.w3.org/2000/svg" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" class="lucide lucide-trash-2"><path d="M3 6h18"/><path d="M19 6v14c0 1-1 2-2 2H7c-1 0-2-1-2-2V6"/><path d="M8 6V4c0-1 1-2 2-2h4c1 0 2 1 2 2v2"/><line x1="10" x2="10" y1="11" y2="17"/><line x1="14" x2="14" y1="11" y2="17"/></svg>
+                            </button>
+                        </li>
+                    `).join('')
+                    : `<li class="text-center text-gray-500 p-8">No changelog entries to display.</li>`;
+
+                return `
+                    <section class="p-8 bg-white rounded-xl shadow-lg border border-gray-200">
+                        <h2 class="text-4xl font-extrabold text-norwegian-red mb-4">Admin: Add Changelog</h2>
+                        
+                        <div class="mb-8">
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Add New Changelog Entry</h3>
+                            <form id="add-changelog-form" onsubmit="addChangelogEntry(event)" class="space-y-4">
+                                <input type="text" name="changelog-version" placeholder="Version (e.g., 1.2.0)" required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red">
+                                <textarea name="changelog-description" rows="4" placeholder="Describe the changes..." required
+                                    class="mt-1 block w-full px-4 py-2 border border-gray-300 rounded-md shadow-sm focus:ring-norwegian-red focus:border-norwegian-red"></textarea>
+                                <button type="submit"
+                                    class="w-full inline-flex justify-center py-2 px-4 border border-transparent shadow-sm text-sm font-medium rounded-md text-white bg-norwegian-red hover:bg-red-700 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-red-500">
+                                    Add Entry
+                                </button>
+                            </form>
+                        </div>
+                        
+                        <div>
+                            <h3 class="text-2xl font-bold text-gray-800 mb-4">Existing Changelog Entries</h3>
+                            <ul class="space-y-2">
+                                ${changelogList}
+                            </ul>
+                        </div>
+                    </section>
+                `;
+            };
+
 
             switch (pageName) {
                 case 'home':
